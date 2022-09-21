@@ -66,7 +66,7 @@ def form_page():
     main_price = 0
     i=0
     return render_template('form_page.html', i=i,unit_components=unit_components, component=component,component_price=component_price, comments=comments, main_type=main_type, period=period,main_price=main_price, maintenances=maintenances)
-    
+
 
 @app.route('/form_page/add_component', methods=['POST','GET'])
 def form_page_add_component():
