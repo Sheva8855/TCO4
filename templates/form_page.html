@@ -1,0 +1,241 @@
+{% extends 'base.html'%}
+
+{%block title%}
+
+
+{%endblock%}
+
+{%block body%}
+
+
+<style>
+table {
+    counter-reset: tableCount;
+}
+.counterCell:before {
+    content: counter(tableCount);
+    counter-increment: tableCount;
+}
+ul {list-style-type: decimal;}
+</style>
+
+
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+  <li class="nav-item" role="presentation">
+    <a class="nav-link active" id="form" data-bs-toggle="tab" data-bs-target="#Entry form" type="button" role="tab" aria-controls="Entry form" aria-selected="true" href="/form_page">Entry form</a>
+  </li>
+  <li class="nav-item" role="presentation">
+    <a class="nav-link" id="capex" data-bs-toggle="tab" data-bs-target="#capex" type="button" role="tab" aria-controls="capex" aria-selected="false" href="/capex">CAPEX</a>
+  </li>
+  <li class="nav-item" role="presentation">
+    <a class="nav-link" id="efficiency" data-bs-toggle="tab" data-bs-target="#efficiency" type="button" role="tab" aria-controls="efficiency" aria-selected="false" href="/efficiency">Efficiency</a>
+  </li>
+    <li class="energy" role="presentation">
+    <a class="nav-link" id="energy" data-bs-toggle="tab" data-bs-target="#energy" type="button" role="tab" aria-controls="energy" aria-selected="false" href="/energy">Energy Cost</a>
+  </li>
+    <li class="energy" role="presentation">
+    <a class="nav-link" id="maintenance" data-bs-toggle="tab" data-bs-target="#maintenance" type="button" role="tab" aria-controls="maintenance" aria-selected="false" href="/maintenance">Maintenance Data</a>
+  </li>
+  </li>
+    <li class="energy" role="presentation">
+    <a class="nav-link" id="tco" data-bs-toggle="tab" data-bs-target="#tco" type="button" role="tab" aria-controls="tco" aria-selected="false" href="/tco">TCO</a>
+  </li>
+</ul>
+<div class="tab-content" id="myTabContent">
+  <div class="tab-pane fade show active" id="form" role="tabpanel" aria-labelledby="Entry form"></div>
+  <div class="tab-pane fade" id="capex" role="tabpanel" aria-labelledby="capex"></div>
+  <div class="tab-pane fade" id="Efficiency" role="tabpanel" aria-labelledby="Efficiency"></div>
+  <div class="tab-pane fade" id="energy" role="tabpanel" aria-labelledby="energy"></div>
+  <div class="tab-pane fade" id="maintenance" role="tabpanel" aria-labelledby="maintenance"></div>
+  <div class="tab-pane fade" id="tco" role="tabpanel" aria-labelledby="tco"></div>
+</div>
+
+<fieldset style="width:500px">
+    <legend align="center"><b>Unit data</b></legend>
+<form action="/form_page/add_component" method="POST" name="unit_data" autocomplete="off" id="unit_data">
+<div class="form-row">
+<div class="col-md-4 mb-3">
+
+ <label for="unit_name">Unit name</label>
+    <p><input type="text" name="unit_name" id="unit_name" class="form-control form-control-sm"></p>
+
+
+  Component name:
+ <input name=component list=components>
+</label>
+<datalist id=components>
+ <label>
+  or select from the list:
+  <select name=component>
+   <option value="">
+   <option>pump
+   <option>baseplate
+   <option>driver
+   <option>coupling
+   <option>Supply System
+   <option>fluid coupling
+   <option>vfd
+   <option>Lube oil system
+   <option>transformer
+   <option>harmonic filter
+   <option>others
+   <option>instruments
+  </select>
+ </label>
+</datalist>
+
+
+		</select>
+
+
+
+    <p></p><label for="component_price">Component price</label>
+    <input type="number" name="component_price" id="component_price" placeholder="0" min=0 step="100" class="form-control form-control-sm" required>
+
+    <p></p><label for="unit_name">Comments</label>
+    <input type="text" name="comments" id="comments" class="form-control form-control-sm"><p></p>
+
+    <button type="submit" onclick="document.forms.unit_data.submit()">Add component</button>
+
+</form>
+</fieldset>
+ <table class="table table-striped table-sm">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">component</th>
+                <th scope="col">component price</th>
+                <th scope="col">comments</th>
+                <th scope="col">Delete</th>
+                 </tr>
+          </thead>
+     <tbody>
+     {% for i in unit_components %}
+            <tr>
+              <td class="counterCell"></td>
+              <td>{{i.component}}</td>
+              <td>{{i.component_price}}</td>
+                 <td>{{i.comments}}</td>
+                <td><a class="btn btn-warning" href='/form_page/{{i.id}}/del'>Delete</a></td>
+                 </tr>
+     {% endfor %}
+          </tbody>
+        </table>
+
+<p></p>
+<fieldset  style="width:500px">
+
+
+    <legend align="center"><b>Maintenance</b></legend>
+    <form action="/form_page/add_maintenance" method="POST" name="maintenance" autocomplete="off" id="maintenance">
+        <!--<p><label for="main_type">Maintenance type</label></p>-->
+    <!--<p><input type="text" name="main_type" id="main_type" class="form-control form-control-sm" required></p>-->
+
+      Maintenance type:
+ <input name=main_type list=maintenances>
+</label>
+<datalist id=maintenances>
+ <label>
+  or select from the list:
+  <select name=main_type>
+   <option value="">
+   <option>Annual Maintenance
+   <option>Major Overhaul
+  </select>
+ </label>
+</datalist>
+
+	</select>
+
+ <!--<label for="main_type" class="form-label">Maintenance type</label>-->
+ <!--<select name="main_type" id="main_type" form="maintenance">-->
+		<!--<option disabled selected value>Выберете компонент</option>-->
+		<!--<option value="21">Annual Maintenance</option>-->
+		<!--<option value="22">Major Overhaul</option>-->
+<!--</select>-->
+   <p></p><label for="period">Periodity</label>
+    <input type="number" name="period" id="period" placeholder="0" min=0 class="form-control form-control-sm" required>
+
+    <p></p><label for="main_price">Maintenance price</label>
+    <input type="number" name="main_price" id="main_price" placeholder="0" min=0 class="form-control form-control-sm" required>
+
+	<button type="submit" onclick="document.forms.maintenance.submit()">Add maintenance</button>
+</form>
+</fieldset>
+
+<p></p>
+
+<table class="table table-striped table-sm">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Maintenance type</th>
+                <th scope="col">Period</th>
+                <th scope="col">Price</th>
+                <th scope="col">Delete</th>
+                 </tr>
+          </thead>
+     <tbody>
+     {% for j in maintenances %}
+            <tr>
+              <td class="counterCell"></td>
+              <td>{{j.main_type}}</td>
+              <td>{{j.period}}</td>
+              <td>{{j.main_price}}</td>
+              <td><a class="btn btn-warning" href='/form_page/{{j.id}}/del_man'>Delete</a></td>
+            </tr>
+     {% endfor %}
+          </tbody>
+        </table>
+
+<fieldset id="points" style="width:500px">
+
+
+    <legend align="center"><b>Operating points</b></legend>
+    <form method="POST" name="oper_points">
+
+
+   <label for="eff_motor">Efficiency - Electric Motor, %</label>
+    <div text-align="right"><input type="number" name="eff_motor" id="eff_motor" placeholder="0" min=0 max="100" class="form-control form-control-sm" required></div><p></p>
+
+	   <label for="eff_vfd">Efficiency - Harmonic Filter (for VFD), %</label>
+    <input type="number" name="eff_vfd" id="eff_vfd" placeholder="0" min=0 max="100" class="form-control form-control-sm" required><p></p>
+
+		   <label for="eff_fluid">Efficiency - Fluid Coupling, % (for Fluid Coupling), %</label>
+    <input type="number" name="eff_fluid" id="eff_fluid" placeholder="0" min=0 max="100" class="form-control form-control-sm" required><p></p>
+
+			   <label for="power_pump">Power Consumption - Pump, kW</label>
+   <input type="number" name="power_pump" id="power_pump" placeholder="0" min="0" class="form-control form-control-sm" required><p></p>
+
+			   <label for="power_aux">Power Consumption - Auxilliaries, kW</label>
+    <input type="number" name="power_aux" id="power_aux" placeholder="0" min="0" class="form-control form-control-sm" required><p></p>
+
+				   <label for="scenario">Operating Scenario, months / year</label>
+    <input type="number" name="scenario" id="scenario" placeholder="0" min="0" max="12" step="1" class="form-control form-control-sm" required><p></p>
+
+
+	<button type="submit" onclick="document.forms.oper_points.submit()">Add operating point</button>
+</form>
+</fieldset>
+<p></p>
+<fieldset id="economy" style="width:400px">
+
+
+    <legend align="center"><b>General </b></legend>
+    <form method="POST" name="economy">
+
+
+   <p><label for="energy_price">Energy Price, EUR/kWh</label></p>
+    <p><input type="number" name="energy_price" id="energy_price" placeholder="0" min="0" step="0.01" class="form-control form-control-sm" required></p>
+
+    <p><label for="main_price">Annual Price Increase, %</label></p>
+    <p><input type="number" name="main_price" id="main_price" placeholder="0" min=0 step="0.01" class="form-control form-control-sm" required></p>
+
+	<button type="submit" onclick="document.forms.economy.submit()">Add data</button>
+</form>
+</fieldset>
+
+</div>
+</div>
+
+    {%endblock%}

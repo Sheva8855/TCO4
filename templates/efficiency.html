@@ -1,0 +1,45 @@
+{% extends 'base.html'%}
+
+{%block title%}
+Efficiency
+
+{%endblock%}
+
+{%block body%}
+
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+  <li class="nav-item" role="presentation">
+    <a class="nav-link" id="form" data-bs-toggle="tab" data-bs-target="#Entry form" type="button" role="tab" aria-controls="Entry form" aria-selected="false" href="/form_page">Entry form</a>
+  </li>
+  <li class="nav-item" role="presentation">
+    <a class="nav-link" id="capex" data-bs-toggle="tab" data-bs-target="#capex" type="button" role="tab" aria-controls="capex" aria-selected="false" href="/capex">CAPEX</a>
+  </li>
+  <li class="nav-item" role="presentation">
+    <a class="nav-link active" id="efficiency" data-bs-toggle="tab" data-bs-target="#efficiency" type="button" role="tab" aria-controls="efficiency" aria-selected="true" href="/efficiency">Efficiency</a>
+  </li>
+    <li class="energy" role="presentation">
+    <a class="nav-link" id="energy" data-bs-toggle="tab" data-bs-target="#energy" type="button" role="tab" aria-controls="energy" aria-selected="false" href="/energy">Energy Cost</a>
+  </li>
+    <li class="energy" role="presentation">
+    <a class="nav-link" id="maintenance" data-bs-toggle="tab" data-bs-target="#maintenance" type="button" role="tab" aria-controls="maintenance" aria-selected="false" href="/maintenance">Maintenance Data</a>
+  </li>
+  </li>
+    <li class="energy" role="presentation">
+    <a class="nav-link" id="tco" data-bs-toggle="tab" data-bs-target="#tco" type="button" role="tab" aria-controls="tco" aria-selected="false" href="/tco">TCO</a>
+  </li>
+</ul>
+<div class="tab-content" id="myTabContent">
+  <div class="tab-pane fade" id="form" role="tabpanel" aria-labelledby="Entry form"></div>
+  <div class="tab-pane fade" id="capex" role="tabpanel" aria-labelledby="capex"></div>
+  <div class="tab-pane fade" id="Efficiency" role="tabpanel" aria-labelledby="Efficiency"></div>
+  <div class="tab-pane fade" id="energy" role="tabpanel" aria-labelledby="energy"></div>
+  <div class="tab-pane fade" id="maintenance" role="tabpanel" aria-labelledby="maintenance"></div>
+  <div class="tab-pane fade" id="tco" role="tabpanel" aria-labelledby="tco"></div>
+</div>
+
+
+<p class="lead">hfghfghf</p>
+
+
+
+{%endblock%}
