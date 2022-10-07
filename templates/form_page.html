@@ -9,6 +9,11 @@
 
 
 <style>
+.flex1 {
+    background:pink;
+    display: flex;
+    gap:50px ;
+}
 table {
     counter-reset: tableCount;
 }
@@ -17,6 +22,8 @@ table {
     counter-increment: tableCount;
 }
 ul {list-style-type: decimal;}
+
+
 </style>
 
 
@@ -50,11 +57,13 @@ ul {list-style-type: decimal;}
   <div class="tab-pane fade" id="tco" role="tabpanel" aria-labelledby="tco"></div>
 </div>
 
+<div class="flex1">
+
 <fieldset style="width:500px">
     <legend align="center"><b>Unit data</b></legend>
-<form action="/form_page/add_component" method="POST" name="unit_data" autocomplete="off" id="unit_data">
-<div class="form-row">
-<div class="col-md-4 mb-3">
+    <form action="/form_page/add_component" method="POST" name="unit_data" autocomplete="off" id="unit_data">
+    <div class="form-row">
+    <div class="col-md-4 mb-3">
 
 
 
@@ -99,12 +108,18 @@ ul {list-style-type: decimal;}
 </form>
 </fieldset>
  <table class="table table-striped table-sm">
+     <colgroup>
+       <col span="1" style="width: 100px;">
+       <col span="1" style="width: 150px;">
+       <col span="1" style="width: 150px;">
+         <col span="1" style="width: 100px;">
+    </colgroup>
           <thead>
             <tr>
               <th scope="col">#</th>
-              <th scope="col">component</th>
-                <th scope="col">component price</th>
-                <th scope="col">comments</th>
+              <th scope="col">Component</th>
+                <th scope="col">Component price</th>
+                <th scope="col">Comments</th>
                 <th scope="col">Delete</th>
                  </tr>
           </thead>
@@ -120,8 +135,10 @@ ul {list-style-type: decimal;}
      {% endfor %}
           </tbody>
         </table>
-
+</div>
 <p></p>
+
+<div class="flex1">
 <fieldset  style="width:500px">
 
 
@@ -175,7 +192,7 @@ ul {list-style-type: decimal;}
           </thead>
      <tbody>
      {% for j in maintenances %}
-            <tr>
+            <tr height="15px">
               <td class="counterCell"></td>
               <td>{{j.main_type}}</td>
               <td>{{j.period}}</td>
@@ -186,22 +203,20 @@ ul {list-style-type: decimal;}
      {% endfor %}
           </tbody>
         </table>
-
+</div>
+<p></p>
+<div class="flex1">
 <fieldset id="points" style="width:500px">
-
-
     <legend align="center"><b>Operating points</b></legend>
-    <form method="POST" name="oper_points">
+        <form action="/form_page/add_point" method="POST" name="oper_points">
 
-
-   <label for="eff_driver">Efficiency - Electric Motor, %</label>
+    <label for="eff_driver">Efficiency - Electric Motor, %</label>
     <div text-align="right"><input type="number" name="eff_driver" id="eff_driver" placeholder="0" min=0 max="100" class="form-control form-control-sm" required></div><p></p>
 
 	   <label for="eff_other">Efficiency - (VFD or Fluid Coupling or others), %</label>
     <input type="number" name="eff_other" id="eff_other" placeholder="0" min=0 max="100" class="form-control form-control-sm" required><p></p>
 
-
-			   <label for="power_pump">Power Consumption - Pump, kW</label>
+            <label for="power_pump">Power Consumption - Pump, kW</label>
    <input type="number" name="power_pump" id="power_pump" placeholder="0" min="0" class="form-control form-control-sm" required><p></p>
 
 			   <label for="power_aux">Power Consumption - Auxilliaries, kW</label>
@@ -217,55 +232,35 @@ ul {list-style-type: decimal;}
 
 <table class="table table-striped table-sm">
           <thead>
-
+          <th scope="col">#</th>
+              <th scope="col">Efficiency - Electric Motor, %</th>
+                <th scope="col">Efficiency - Others, %</th>
+                <th scope="col">Power Consumption, %</th>
+                <th scope="col">Power - Auxilliaries, % </th>
+                <th scope="col">Power - Auxilliaries, %</th>
+                <th scope="col">Delete</th>
           </thead>
-     <tbody>
+     <tbody>{% for k in points %}
             <tr>
-              <td>Efficiency - Electric Motor, %</td>
-                {% for k in points %}
-                <td>{{k.eff_driver}}</td>
-                 {% endfor %}
+                <td class="counterCell"></td>
+                <td> {{k.eff_driver}}</td>
+                <td> {{k.eff_other}}</td>
+                <td> {{k.power_pump}}</td>
+                <td> {{k.power_aux}}</td>
+                <td> {{k.scenario}}</td>
+                <td><a class="btn btn-warning" href='/form_page/{{k.id}}/del_point'>Delete</a></td>
             </tr>
-            <tr>
-              <td>Efficiency - Others, %</td>
-                {% for k in points %}
-                <td>{{k.eff_other}}</td>
-                 {% endfor %}
-            </tr>
-            <tr>
-              <td>Power Consumption, %</td>
-                {% for k in points %}
-                <td>{{k.power_pump}}</td>
-                 {% endfor %}
-            </tr>
-            <tr>
-              <td>Power - Auxilliaries, %</td>
-                {% for k in points %}
-                <td>{{k.power_aux}}</td>
-                 {% endfor %}
-            </tr>
-            <tr>
-              <td>Power - Auxilliaries, %</td>
-                {% for k in points %}
-                <td>{{k.power_aux}}</td>
-                 {% endfor %}
-            </tr>
-
-
-          </tbody>
+            {% endfor %}
+     </tbody>
         </table>
- <td>{{k.main_type}}</td>
-              <td>{{j.period}}</td>
-              <td>{{j.main_price}}</td>
-                <td>{{j.main_comments}}</td>
-<a class="btn btn-warning" href='/form_page/{{j.id}}/del_man'>Delete</a></td>
+    </div>
 
 <p></p>
 <fieldset id="economy" style="width:400px">
 
 
     <legend align="center"><b>General </b></legend>
-    <form action="/form_page/add_general" method="POST" name="general" id="general">
+    <form action="/form_page/add_general" method="POST" name="general">
 
  <label for="unit_name">Unit name     </label>(Current unit name: {{unit_name}})
     <input type="text" name="unit_name" id="unit_name" class="form-control form-control-sm" value="P-001">

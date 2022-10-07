@@ -1,6 +1,7 @@
 from flask import Flask, render_template, url_for, request, redirect, flash
 from flask_sqlalchemy import SQLAlchemy
 import matplotlib.pyplot as plt
+from matplotlib.pyplot import figure
 import numpy as np
 app=Flask( __name__ )
 app.config['SQLALCHEMY_DATABASE_URI']='sqlite:///tco.db'
@@ -73,6 +74,8 @@ def form_page():
     energy_price=0.04
     annual_increase=1.5
     number_years = 30
+
+    points = Point.query.all()
     k=0
     eff_driver = 0
     eff_other = 0
@@ -80,7 +83,7 @@ def form_page():
     power_aux = 0
     scenario = 0
 
-    return render_template('form_page.html', eff_driver=eff_driver,eff_other=eff_other,power_pump=power_pump,power_aux=power_aux,scenario=scenario,k=k, i=i,j=j,unit_components=unit_components, component=component,component_price=component_price, comments=comments, main_type=main_type, period=period,main_price=main_price, main_comments=main_comments, maintenances=maintenances, unit_name=unit_name, energy_price=energy_price, annual_increase=annual_increase, number_years=number_years )
+    return render_template('form_page.html', points=points,eff_driver=eff_driver,eff_other=eff_other,power_pump=power_pump,power_aux=power_aux,scenario=scenario,k=k, i=i,j=j,unit_components=unit_components, component=component,component_price=component_price, comments=comments, main_type=main_type, period=period,main_price=main_price, main_comments=main_comments, maintenances=maintenances, unit_name=unit_name, energy_price=energy_price, annual_increase=annual_increase, number_years=number_years )
 
 #Обработка формы добавление компонента
 @app.route('/form_page/add_component', methods=['POST','GET'])
@@ -135,10 +138,6 @@ def form_page_add_maintenance():
 def form_page_add_general():
 
     generals = General.query.all()
-    # unit_name='P-001'
-    # energy_price=0.04
-    # annual_increase=1.5
-    # number_years = 30
 
     if request.method=="POST":
         # generals = General.query.get_or_404(id)
@@ -170,8 +169,6 @@ def form_page_add_point():
     power_pump = 0
     power_aux = 0
     scenario = 0
-
-
     if request.method=="POST":
         points = Point.query.all()
         eff_driver = request.form["eff_driver"]
@@ -209,7 +206,7 @@ def delete_point(id):
         db.session.commit()
         return redirect('/form_page')
     except:
-        return "При удалении сведений об обслуживании произошла ошибка"
+        return "При удалении operating point произошла ошибка"
 
 
 
@@ -224,59 +221,53 @@ def delete_component(id):
     except:
         return "При удалении компонента произошла ошибка"
 
-# @app.route('/maintenance', methods=['POST','GET'])
-# def maintenance():
-#     unit_components = Component.query.all()
-#     maintenances = Maintenance.query.all()
-#     generals = Component.query.all()
-#     annual_increase = units[-1].annual_increase#annual_increase = 1.5
-#     n=units[-1].number_years#n = 30
-#     annual_main_fluid = [1, 1000]
-#     Major_Overhaul_fluid = [8, 10000]
-#     annual_main_vfd = [1, 2000]
-#     Major_Overhaul_vfd_5 = [5, 5000]
-#     Major_Overhaul_vfd_10 = [10, 12000]
-#     Major_Overhaul_vfd_15 = [15, 25000]
-#     main_fluid = [annual_main_fluid[1]]
-#     main_vfd = [annual_main_vfd[1]]
-#     i = 2
-#     x = annual_main_fluid[1]
-#     while i <= n:
-#         x += annual_main_fluid[1] * (1 + (annual_increase / 100)) ** (i - 1)
-#         if i % Major_Overhaul_fluid[0] == 0:
-#             x += Major_Overhaul_fluid[1]
-#         main_fluid.append(round(x))
-#         i += 1
-#
-#     j = 2
-#     y = annual_main_vfd[1]
-#     while j <= n:
-#         y += annual_main_vfd[1] * (1 + (annual_increase / 100)) ** (j - 1)
-#         if j % Major_Overhaul_vfd_5[0] == 0:
-#             y += Major_Overhaul_vfd_5[1]
-#         if j % Major_Overhaul_vfd_10[0] == 0:
-#             y += Major_Overhaul_vfd_10[1]
-#         if j % Major_Overhaul_vfd_15[0] == 0:
-#             y += Major_Overhaul_vfd_15[1]
-#         main_vfd.append(round(y))
-#         j += 1
-#
-#     a = np.array(main_fluid)
+@app.route('/maintenance', methods=['POST','GET'])
+def maintenance():
+     unit_components = Component.query.all()
+     maintenances = Maintenance.query.all()
+     prices=[]
+     per=[]
+     for maintenance in maintenances:
+         prices.append(maintenance.main_price)
+         per.append(maintenance.period)
+
+     generals = General.query.all()
+     annual_increase = generals[-1].annual_increase #annual_increase = 1.5
+     n=generals[-1].number_years #n = 30
+     #[maintenances[-1].period,maintenances[-1].main_price]
+     main_type = 0
+     period = 0
+     main_price = 0
+     main_comments = 0
+
+     i = 1
+     x = 0
+     mains=[]
+     while i <= n:
+         for j in range(len(per)):
+             if i%per[j]==0:
+                x+=prices[j] * (1 + (annual_increase / 100)) ** (i - 1)
+         mains.append(round(x))
+         i+=1
+
+
+     a = np.array(mains)
 #     b = np.array(main_vfd)
-#     plt.switch_backend('agg')
-#     plt.plot(a, label='Fluid Coupling')
+     plt.switch_backend('agg')
+     plt.plot(a, label='Costs')
 #     plt.plot(b, label='VFD')
-#     plt.title('Mainenance Cost,  MEUR, /n Pump Unit with a Fluid Coupling - VFD Driven Pump Unit')
-#     plt.xlabel('Year')
-#     plt.ylabel('Maintenance Cost, EUR')
-#     plt.legend()
-#     plt.rcParams['figure.figsize'] = [8, 8]
-#     plt.savefig('static/maintenance.png')
-#     years=range(1,n+1)
-#     #plt.show()
-#     #plt.close(fig)
-#     #figsize = (8, 8)
-#     return render_template('maintenance.html',annual_main_fluid=annual_main_fluid,Major_Overhaul_fluid=Major_Overhaul_fluid,main_fluid=main_fluid,main_vfd=main_vfd,a=a,b=b, years=years)
+     plt.title('Mainenance Cost,  MEUR, per Pump Unit')
+     plt.xlabel('Year')
+     plt.ylabel('Maintenance Cost, EUR')
+     plt.legend()
+     plt.grid()
+     plt.xticks(np.arange(1, n + 1, 1.0))
+     plt.rcParams["figure.figsize"] = (16, 8)
+     plt.savefig('static/maintenance.png')
+     years=range(1,n+1)
+     # plt.show()
+     # plt.close(fig)
+     return render_template('maintenance.html',mains=mains,a=a, years=years)
 
 #Конец обработки форм
 
@@ -299,18 +290,25 @@ def points():
     return render_template('form_page.html', points_form=points_form)
 
 
-
-
-
-
-
 @app.route('/efficiency', methods=['POST','GET'])
 def efficiency():
+    generals = General.query.all()
+    points = Point.query.all()
 
-    return render_template('efficiency.html')
+    # eff_driver = points[0].eff_driver
+    # eff_other = points[0].eff_other
+    # power_pump = points[0].power_pump
+    # power_aux = points[0].power_aux
+    # scenario = points[0].scenario
+
+    unit_name = generals[0].unit_name
+    energy_price = generals[0].energy_price
+    annual_increase = generals[0].annual_increase
+    return render_template('efficiency.html',unit_name=unit_name,energy_price=energy_price,annual_increase=annual_increase,points=points)
 
 @app.route('/energy', methods=['POST','GET'])
 def energy():
+
     return render_template('energy.html')
 
 @app.route('/capex', methods=['POST','GET'])

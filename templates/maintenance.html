@@ -7,6 +7,14 @@ Maintenance Data
 
 {%block body%}
 
+<style>
+.flex1 {
+    background:pink;
+    display: flex;
+    gap:50px ;
+
+</style>
+
 <ul class="nav nav-tabs" id="myTab" role="tablist">
   <li class="nav-item" role="presentation">
     <a class="nav-link" id="form" data-bs-toggle="tab" data-bs-target="#Entry form" type="button" role="tab" aria-controls="Entry form" aria-selected="false" href="/form_page">Entry form</a>
@@ -37,23 +45,17 @@ Maintenance Data
   <div class="tab-pane fade" id="tco" role="tabpanel" aria-labelledby="tco"></div>
 </div>
 
-<table border="1px solid black" align="center">
-  <th width="100" align="middle">Year</th><th width="100">VFD</th><th>Fluid Coulping</th><th>Chart</th>
+<table class="flex1" border="1px solid black" align="center">
+  <th width="100" align="middle">Year</th><th width="100">Costs</th>
   <tr align="middle">
     <td> {% for x in years %}
-      <p> {{ x }} </p>
+      {{ x }} <br>
     {% endfor %}</td>
     <td>
-    {% for x in main_vfd %}
-<p> {{ x }} </p>
+    {% for x in mains %}
+ {{ x }} <br>
     {% endfor %}</td>
-    <td>
-       {% for x in main_fluid %}
-<p>     {{      x }} </p>
-    {% endfor %}
-    </td>
-    <td><img src="{{url_for('static', filename='maintenance.png')}}" style="float:right;width:800px;height:700px;" align="middle" /></td>
+    <td><img src="{{url_for('static', filename='maintenance.png')}}" align="middle" /></td>
     </tr></table>
-
-
+<img src="{{url_for('static', filename='maintenance.png')}}" align="middle" width="1000" height="500"/>
 {%endblock%}
