@@ -8,6 +8,27 @@ CAPEX
 {%block body%}
 
 <style>
+
+.image {
+  grid-area: image;
+  background:pink;
+}
+
+.tab {
+  grid-area: tab;
+  align-self: center;
+  background:lightblue;
+}
+.container {
+  display: grid;
+  margin-left: 10px;
+  gap: 10px 10px;
+  grid-template-columns: 400px 1000px;
+  grid-template-rows: 700px;
+  grid-template-areas:
+    "tab image";
+    }
+
 table {
     counter-reset: tableCount;
 }
@@ -48,7 +69,10 @@ ul {list-style-type: decimal;}
   <div class="tab-pane fade" id="tco" role="tabpanel" aria-labelledby="tco"></div>
 </div>
 
-<table style="width:100px;" class="table table-striped table-sm">
+<section class="container">
+  <div class="tab">
+
+<table class="table table-striped table-sm">
           <thead>
             <tr>
               <th scope="col">#</th>
@@ -69,12 +93,12 @@ ul {list-style-type: decimal;}
      {% endfor %}
           </tbody>
 </table>
-Total cost: {{total_capex_direct}} EURO<br>
+    <b>Total cost: {{total_capex_direct}} EURO</b><br>
+  </div>
+<div class="image">
+<img src="{{url_for('static', filename='capex.png')}}" align="middle" alt="Capex pic" width="1000" height="700"/>
 
-
-<img src="{{url_for('static', filename='capex.png')}}" align="middle" />
-
-
-
+  </div>
+</section>
 
 {%endblock%}

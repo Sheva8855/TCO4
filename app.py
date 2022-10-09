@@ -69,11 +69,16 @@ def form_page():
     main_comments=0
     i=0
     j=0
-
-    unit_name='P-001'
-    energy_price=0.04
-    annual_increase=1.5
-    number_years = 30
+    m=0
+    generals=General.query.all()
+    unit_name = generals[-1].unit_name
+    energy_price = generals[-1].energy_price
+    annual_increase = generals[-1].annual_increase
+    number_years = generals[-1].number_years
+    # unit_name='P-001'
+    # energy_price=0.04
+    # annual_increase=1.5
+    # number_years = 30
 
     points = Point.query.all()
     k=0
@@ -83,7 +88,7 @@ def form_page():
     power_aux = 0
     scenario = 0
 
-    return render_template('form_page.html', points=points,eff_driver=eff_driver,eff_other=eff_other,power_pump=power_pump,power_aux=power_aux,scenario=scenario,k=k, i=i,j=j,unit_components=unit_components, component=component,component_price=component_price, comments=comments, main_type=main_type, period=period,main_price=main_price, main_comments=main_comments, maintenances=maintenances, unit_name=unit_name, energy_price=energy_price, annual_increase=annual_increase, number_years=number_years )
+    return render_template('form_page.html',m=m,generals=generals,points=points,eff_driver=eff_driver,eff_other=eff_other,power_pump=power_pump,power_aux=power_aux,scenario=scenario,k=k, i=i,j=j,unit_components=unit_components, component=component,component_price=component_price, comments=comments, main_type=main_type, period=period,main_price=main_price, main_comments=main_comments, maintenances=maintenances, unit_name=unit_name, energy_price=energy_price, annual_increase=annual_increase, number_years=number_years )
 
 #Обработка формы добавление компонента
 @app.route('/form_page/add_component', methods=['POST','GET'])
@@ -140,19 +145,23 @@ def form_page_add_general():
     generals = General.query.all()
 
     if request.method=="POST":
-        # generals = General.query.get_or_404(id)
-        # try:
-        #     db.session.delete(maintenance)
-        #     db.session.commit()
-        # except:
-        #     return "При удалении данных произошла ошибка"
+
         generals = General.query.all()
         unit_name = request.form["unit_name"]
+        if unit_name=='':
+            unit_name=generals[-1].unit_name
         energy_price = request.form["energy_price"]
+        if energy_price=='':
+            energy_price=generals[-1].energy_price
         annual_increase = request.form["annual_increase"]
+        if annual_increase=='':
+            annual_increase=generals[-1].annual_increase
         number_years = request.form["number_years"]
+        if number_years=='':
+            number_years=generals[-1].number_years
         general=General(unit_name=unit_name,energy_price=energy_price,annual_increase=annual_increase,number_years=number_years)
         try:
+            db.session.query(General).delete()
             db.session.add(general)
             db.session.commit()
             return redirect(url_for('form_page'))
@@ -196,7 +205,6 @@ def delete_maintenance(id):
         return redirect('/form_page')
     except:
         return "При удалении сведений об обслуживании произошла ошибка"
-
 
 @app.route('/form_page/<int:id>/del_point')
 def delete_point(id):
@@ -301,9 +309,9 @@ def efficiency():
     # power_aux = points[0].power_aux
     # scenario = points[0].scenario
 
-    unit_name = generals[0].unit_name
-    energy_price = generals[0].energy_price
-    annual_increase = generals[0].annual_increase
+    unit_name = generals[-1].unit_name
+    energy_price = generals[-1].energy_price
+    annual_increase = generals[-1].annual_increase
     return render_template('efficiency.html',unit_name=unit_name,energy_price=energy_price,annual_increase=annual_increase,points=points)
 
 @app.route('/energy', methods=['POST','GET'])

@@ -8,10 +8,26 @@ Maintenance Data
 {%block body%}
 
 <style>
-.flex1 {
-    background:pink;
-    display: flex;
-    gap:50px ;
+
+.image {
+  grid-area: image;
+}
+
+.tab {
+  grid-area: tab;
+  align-self: start;
+  background:lightblue;
+}
+.container {
+  display: grid;
+  margin-left: 10px;
+  gap: 10px 10px;
+  grid-template-columns: 300px 900px;
+  grid-template-rows: auto;
+  grid-template-areas:
+    "tab image";
+    }
+
 
 </style>
 
@@ -45,8 +61,11 @@ Maintenance Data
   <div class="tab-pane fade" id="tco" role="tabpanel" aria-labelledby="tco"></div>
 </div>
 
-<table class="flex1" border="1px solid black" align="center">
-  <th width="100" align="middle">Year</th><th width="100">Costs</th>
+<section class="container">
+  <div class="tab">
+
+<table class="table table-striped table-sm" border="1px solid black" align="center">
+  <th width="100" class="text-center">Year</th><th width="100" class="text-center">Costs</th>
   <tr align="middle">
     <td> {% for x in years %}
       {{ x }} <br>
@@ -54,8 +73,12 @@ Maintenance Data
     <td>
     {% for x in mains %}
  {{ x }} <br>
-    {% endfor %}</td>
-    <td><img src="{{url_for('static', filename='maintenance.png')}}" align="middle" /></td>
+    {% endfor %}
+    </td>
     </tr></table>
+  </div>
+  <div class="image">
 <img src="{{url_for('static', filename='maintenance.png')}}" align="middle" width="1000" height="500"/>
+    </div>
+</section>
 {%endblock%}
