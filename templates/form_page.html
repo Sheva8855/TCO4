@@ -129,18 +129,21 @@ ul {list-style-type: decimal;}
   or select from the list:
   <select name=component>
    <option value="">
-   <option>pump
-   <option>baseplate
-   <option>driver
-   <option>coupling
-   <option>Supply_System
-   <option>Fluid_Coupling
-   <option>vfd
-   <option>Lube_oil_system
-   <option>transformer
-   <option>harmonic_filter
-   <option>others
-   <option>instruments
+      {% for a in component_list%}
+       <option>{{a}}
+   <!--<option>pump-->
+   <!--<option>baseplate-->
+   <!--<option>driver-->
+   <!--<option>coupling-->
+   <!--<option>Supply_System-->
+   <!--<option>Fluid_Coupling-->
+   <!--<option>vfd-->
+   <!--<option>Lube_oil_system-->
+   <!--<option>transformer-->
+   <!--<option>harmonic_filter-->
+   <!--<option>others-->
+   <!--<option>instruments-->
+      {% endfor %}
   </select>
  </label>
 </datalist>
@@ -325,7 +328,7 @@ ul {list-style-type: decimal;}
     <p><input type="number" name="number_years" id="number_years" placeholder="0" min=0 step="1" class="form-control form-control-sm" required></p>
 
 
-	<button type="submit" onclick="document.forms.general.submit()">Add data</button>
+	<button type="submit" onclick="document.forms.general.submit()">Update data</button>
 
 </form>
 </fieldset>

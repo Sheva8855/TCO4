@@ -40,8 +40,8 @@ Efficiency & Power Consumption
 
 <p class="lead">Efficiency & Power Consumption</p>
 
-<p>Energy Price, EUR/kWh  {{energy_price}}</p>
-<p>Annual Price Increase, %  {{annual_increase}}</p>
+<p>Energy Price: {{energy_price}} EUR/kWh</p>
+<p>Annual Price Increase:  {{annual_increase}} %</p>
 
 <table style="width:100px;" class="table table-striped table-sm">
           <thead>
@@ -69,7 +69,7 @@ Efficiency & Power Consumption
               <td>{{i.power_aux+i.power_pump}}</td>
               <td>{{i.scenario}}</td>
                <td>{{i.scenario*725}}</td>
-              <td>{{i.scenario*725}}</td>
+              <td>{{i.power_aux*8760+i.power_pump*8760}}</td>
 
             </tr>
      {% endfor %}

@@ -52,6 +52,7 @@ class Maintenance (db.Model):
     def __repr__(self):
         return '<Maintenance %r>' % self.id
 
+component_list=['Pump','Baseplate','Driver','Coupling','Supply_System','Fluid_Coupling','VFD','Lube_Oil_System','Transformer','Harmonic_filter','Instruments','Others']
 
 #Главная страница формы
 @app.route('/', methods=['POST','GET'])
@@ -87,8 +88,9 @@ def form_page():
     power_pump = 0
     power_aux = 0
     scenario = 0
+    a=0
 
-    return render_template('form_page.html',m=m,generals=generals,points=points,eff_driver=eff_driver,eff_other=eff_other,power_pump=power_pump,power_aux=power_aux,scenario=scenario,k=k, i=i,j=j,unit_components=unit_components, component=component,component_price=component_price, comments=comments, main_type=main_type, period=period,main_price=main_price, main_comments=main_comments, maintenances=maintenances, unit_name=unit_name, energy_price=energy_price, annual_increase=annual_increase, number_years=number_years )
+    return render_template('form_page.html',component_list=component_list, a=a,m=m,generals=generals,points=points,eff_driver=eff_driver,eff_other=eff_other,power_pump=power_pump,power_aux=power_aux,scenario=scenario,k=k, i=i,j=j,unit_components=unit_components, component=component,component_price=component_price, comments=comments, main_type=main_type, period=period,main_price=main_price, main_comments=main_comments, maintenances=maintenances, unit_name=unit_name, energy_price=energy_price, annual_increase=annual_increase, number_years=number_years )
 
 #Обработка формы добавление компонента
 @app.route('/form_page/add_component', methods=['POST','GET'])
