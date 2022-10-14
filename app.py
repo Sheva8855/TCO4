@@ -242,6 +242,7 @@ def maintenance():
          per.append(maintenance.period)
 
      generals = General.query.all()
+     unit_name = generals[0].unit_name
      annual_increase = generals[-1].annual_increase #annual_increase = 1.5
      n=generals[-1].number_years #n = 30
      #[maintenances[-1].period,maintenances[-1].main_price]
@@ -266,7 +267,7 @@ def maintenance():
      plt.switch_backend('agg')
      plt.plot(a, label='Costs')
 #     plt.plot(b, label='VFD')
-     plt.title('Mainenance Cost,  MEUR, per Pump Unit')
+     plt.title('Mainenance Cost for '+ unit_name)
      plt.xlabel('Year')
      plt.ylabel('Maintenance Cost, EUR')
      plt.legend()
@@ -277,7 +278,7 @@ def maintenance():
      years=range(1,n+1)
      # plt.show()
      # plt.close(fig)
-     return render_template('maintenance.html',mains=mains,a=a, years=years)
+     return render_template('maintenance.html',mains=mains,a=a, years=years, unit_name=unit_name)
 
 #Конец обработки форм
 
@@ -320,6 +321,10 @@ def efficiency():
 def energy():
 
     return render_template('energy.html')
+
+@app.route('/tco', methods=['POST', 'GET'])
+def tco():
+        return render_template('tco.html')
 
 @app.route('/capex', methods=['POST','GET'])
 def capex():

@@ -292,7 +292,7 @@ ul {list-style-type: decimal;}
      <tbody>{% for k in points %}
             <tr>
                 <td class="counterCell"></td>
-                <td> {{k.unit_name}}</td>
+                <td> {{k.eff_driver}}</td>
                 <td> {{k.eff_other}}</td>
                 <td> {{k.power_pump}}</td>
                 <td> {{k.power_aux}}</td>
@@ -338,8 +338,7 @@ ul {list-style-type: decimal;}
           <thead>
           <th scope="col">#</th>
               <th scope="col">Unit name</th>
-                <th scope="col">Efficiency - Others, %</th>
-                <th scope="col">Energy Price, EUR/kWh</th>
+              <th scope="col">Energy Price, EUR/kWh</th>
                 <th scope="col">Annual Price Increase, % </th>
                 <th scope="col"> Number of years</th>
           </thead>
