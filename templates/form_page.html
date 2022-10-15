@@ -203,8 +203,9 @@ ul {list-style-type: decimal;}
   or select from the list:
   <select name=main_type>
    <option value="">
-   <option>Annual Maintenance
-   <option>Major Overhaul
+   <option>Annual Maintenance-Spares
+   <option>Major Overhaul-Spares
+   <option>Labor costs
   </select>
  </label>
 </datalist>
@@ -302,6 +303,7 @@ ul {list-style-type: decimal;}
             {% endfor %}
      </tbody>
         </table>
+      <div style="color:red">{{message}}</div>
   </div>
 
 

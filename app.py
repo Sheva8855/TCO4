@@ -80,8 +80,16 @@ def form_page():
     # energy_price=0.04
     # annual_increase=1.5
     # number_years = 30
-
+    message=''
+    sum=0
     points = Point.query.all()
+    for point in points:
+        sum+=point.scenario
+    if sum<12:
+        message='Please note that sum of scenarios for all points should be 12(months)'
+    elif sum>12:
+        message='Sum of scenarios is more than 12(months)!'
+
     k=0
     eff_driver = 0
     eff_other = 0
@@ -90,7 +98,7 @@ def form_page():
     scenario = 0
     a=0
 
-    return render_template('form_page.html',component_list=component_list, a=a,m=m,generals=generals,points=points,eff_driver=eff_driver,eff_other=eff_other,power_pump=power_pump,power_aux=power_aux,scenario=scenario,k=k, i=i,j=j,unit_components=unit_components, component=component,component_price=component_price, comments=comments, main_type=main_type, period=period,main_price=main_price, main_comments=main_comments, maintenances=maintenances, unit_name=unit_name, energy_price=energy_price, annual_increase=annual_increase, number_years=number_years )
+    return render_template('form_page.html',sum=sum,message=message,component_list=component_list, a=a,m=m,generals=generals,points=points,eff_driver=eff_driver,eff_other=eff_other,power_pump=power_pump,power_aux=power_aux,scenario=scenario,k=k, i=i,j=j,unit_components=unit_components, component=component,component_price=component_price, comments=comments, main_type=main_type, period=period,main_price=main_price, main_comments=main_comments, maintenances=maintenances, unit_name=unit_name, energy_price=energy_price, annual_increase=annual_increase, number_years=number_years )
 
 #Обработка формы добавление компонента
 @app.route('/form_page/add_component', methods=['POST','GET'])
@@ -187,6 +195,11 @@ def form_page_add_point():
         power_pump = request.form["power_pump"]
         power_aux = request.form["power_aux"]
         scenario = request.form["scenario"]
+        sum=0
+        for point in points:
+            sum += point.scenario
+        if sum+int(scenario)>12:
+            return "Sum of operating scenarios should not be more than 12 months/year "
         point=Point(eff_driver=eff_driver,eff_other=eff_other,power_pump=power_pump,power_aux=power_aux,scenario=scenario)
         try:
             db.session.add(point)
@@ -281,25 +294,6 @@ def maintenance():
      return render_template('maintenance.html',mains=mains,a=a, years=years, unit_name=unit_name)
 
 #Конец обработки форм
-
-
-#Обработка  форм
-@app.route('/unit', methods=['POST','GET'])
-def unit():
-    unit_form = 0
-    # if unit_form.validate_on_submit():
-    #     unit_form=0
-    #     pass
-    return render_template('form_page.html')
-
-@app.route('/points', methods=['POST','GET'])
-def points():
-    points_form = points_form
-    # if points_form.validate_on_submit():
-    #     points_form=0
-    #     pass
-    return render_template('form_page.html', points_form=points_form)
-
 
 @app.route('/efficiency', methods=['POST','GET'])
 def efficiency():
