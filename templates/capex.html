@@ -83,13 +83,22 @@ ul {list-style-type: decimal;}
             </tr>
           </thead>
      <tbody>
-     {% for i in unit_components %}
-            <tr>
+     <!--{% for i in unit_components %}-->
+            <!--<tr>-->
+              <!--<td class="counterCell"></td>-->
+              <!--<td>{{i.component}}</td>-->
+              <!--<td>{{i.component_price}}</td>-->
+              <!--<td>{{i.comments}}</td>-->
+            <!--</tr>-->
+     <!--{% endfor %}-->
+
+     {% for i in user_components %}
+            <tr >
               <td class="counterCell"></td>
-              <td>{{i.component}}</td>
-              <td>{{i.component_price}}</td>
-              <td>{{i.comments}}</td>
-            </tr>
+              <td>{{i[0]}}</td>
+              <td>{{i[1]}}</td>
+              <td>{{i[2]}}</td>
+                 </tr>
      {% endfor %}
           </tbody>
 </table>

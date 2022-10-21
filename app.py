@@ -1,16 +1,12 @@
-from flask import Flask, render_template, url_for, request, redirect, flash
+from flask import Flask, render_template, url_for, request, redirect, flash,session
 from flask_sqlalchemy import SQLAlchemy
 import matplotlib.pyplot as plt
 from matplotlib.pyplot import figure
 import numpy as np
 app=Flask( __name__ )
+app.secret_key='BAD_SECRET_KEY'
 app.config['SQLALCHEMY_DATABASE_URI']='sqlite:///tco.db'
 db=SQLAlchemy(app)
-
-
-# class Unit (db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     unit_name = db.Column(db.String(30), nullable=False)
 
 class Component(db.Model):
     id=db.Column(db.Integer, primary_key=True)
@@ -53,12 +49,29 @@ class Maintenance (db.Model):
         return '<Maintenance %r>' % self.id
 
 component_list=['Pump','Baseplate','Driver','Coupling','Supply_System','Fluid_Coupling','VFD','Lube_Oil_System','Transformer','Harmonic_filter','Instruments','Others']
+user_components = []
+user_maintenances = []
+user_points= []
+
+unit_name='P-001'
+energy_price=0.04
+annual_increase=1.5
+number_years = 30
+n1=1
+n2=1
+n3=1
+
 
 #Главная страница формы
 @app.route('/', methods=['POST','GET'])
 @app.route('/form_page', methods=['POST','GET'])
 def form_page():
-    unit_components = Component.query.all()
+    global user_maintenances,user_components,user_points
+    for i in range(len(user_components)):
+        user_components[i][3] = i
+    for y in range(len(user_maintenances)):
+        user_maintenances[y][4] = y
+    #unit_components = Component.query.all()
     component=0
     component_price=0
     comments=0
@@ -71,20 +84,11 @@ def form_page():
     i=0
     j=0
     m=0
-    generals=General.query.all()
-    unit_name = generals[-1].unit_name
-    energy_price = generals[-1].energy_price
-    annual_increase = generals[-1].annual_increase
-    number_years = generals[-1].number_years
-    # unit_name='P-001'
-    # energy_price=0.04
-    # annual_increase=1.5
-    # number_years = 30
     message=''
     sum=0
-    points = Point.query.all()
-    for point in points:
-        sum+=point.scenario
+    #points = Point.query.all()
+    for i in range(len(user_points)):
+        sum+=user_points[i][5]
     if sum<12:
         message='Please note that sum of scenarios for all points should be 12(months)'
     elif sum>12:
@@ -98,22 +102,25 @@ def form_page():
     scenario = 0
     a=0
 
-    return render_template('form_page.html',sum=sum,message=message,component_list=component_list, a=a,m=m,generals=generals,points=points,eff_driver=eff_driver,eff_other=eff_other,power_pump=power_pump,power_aux=power_aux,scenario=scenario,k=k, i=i,j=j,unit_components=unit_components, component=component,component_price=component_price, comments=comments, main_type=main_type, period=period,main_price=main_price, main_comments=main_comments, maintenances=maintenances, unit_name=unit_name, energy_price=energy_price, annual_increase=annual_increase, number_years=number_years )
+    return render_template('form_page.html',user_points=user_points,user_maintenances=user_maintenances,user_components=user_components,sum=sum,message=message,component_list=component_list,a=a,m=m,eff_driver=eff_driver,eff_other=eff_other,power_pump=power_pump,power_aux=power_aux,scenario=scenario,k=k, i=i,j=j,component=component,component_price=component_price, comments=comments, main_type=main_type, period=period,main_price=main_price, main_comments=main_comments, unit_name=unit_name, energy_price=energy_price, annual_increase=annual_increase, number_years=number_years )
 
 #Обработка формы добавление компонента
 @app.route('/form_page/add_component', methods=['POST','GET'])
 def form_page_add_component():
-
-    unit_components = Component.query.all()
-    component=0
-    component_price=0
-    comments=0
-
+    global n1
+    # unit_components = Component.query.all()
+    # component=0
+    # component_price=0
+    # comments=0
     if request.method=="POST":
-        unit_components = Component.query.all()
+        #unit_components = Component.query.all()
         component_price = request.form["component_price"]
         comments = request.form["comments"]
         component = request.form["component"]
+        user_components.append([component,component_price,comments,n1])
+        n1+=1
+        for i in range(len(user_components)):
+            user_components[i][3] = i
         unit_component=Component(component=component,component_price=component_price,comments=comments)
         try:
             db.session.add(unit_component)
@@ -122,23 +129,28 @@ def form_page_add_component():
         except:
             return "При добалении данных произошла ошибка"
     else:
-        return render_template('form_page.html', unit_components=unit_components, component=component,component_price=component_price,comments=comments)
+        return render_template('form_page.html', user_components=user_components,component=component,component_price=component_price,comments=comments)
 
 #Обработка формы добавление обслуживания
 @app.route('/form_page/add_maintenance', methods=['POST','GET'])
 def form_page_add_maintenance():
-    maintenances = Maintenance.query.all()
-    main_type = 0
-    period = 0
-    main_price = 0
-    main_comments = 0
+    # maintenances = Maintenance.query.all()
+    # main_type = 0
+    # period = 0
+    # main_price = 0
+    # main_comments = 0
+    global n2
     if request.method=="POST":
-        maintenances = Maintenance.query.all()
+        #maintenances = Maintenance.query.all()
         main_type = request.form["main_type"]
         period = request.form["period"]
         main_price = request.form["main_price"]
         main_comments = request.form["main_comments"]
-        maintenance=Maintenance(main_type=main_type,period=period,main_price=main_price,main_comments=main_comments)
+        user_maintenances.append([main_type, period, main_price,main_comments, n2])
+        n2 += 1
+        return redirect(url_for('form_page'))
+
+        #maintenance=Maintenance(main_type=main_type,period=period,main_price=main_price,main_comments=main_comments)
         try:
             db.session.add(maintenance)
             db.session.commit()
@@ -146,64 +158,75 @@ def form_page_add_maintenance():
         except:
             return "При добалении данных произошла ошибка"
     else:
-        return render_template('form_page.html', maintenances=maintenances, main_type=main_type,period=period,main_price=main_price,main_comments=main_comments)
+        return render_template('form_page.html', user_maintenances=user_maintenances,main_type=main_type,period=period,main_price=main_price,main_comments=main_comments)
 
 #Обработка формы добавление общих данных
 @app.route('/form_page/add_general', methods=['POST','GET'])
 def form_page_add_general():
-
-    generals = General.query.all()
+    global unit_name,energy_price,annual_increase,number_years
+    #generals = General.query.all()
 
     if request.method=="POST":
-
-        generals = General.query.all()
-        unit_name = request.form["unit_name"]
-        if unit_name=='':
-            unit_name=generals[-1].unit_name
-        energy_price = request.form["energy_price"]
-        if energy_price=='':
-            energy_price=generals[-1].energy_price
-        annual_increase = request.form["annual_increase"]
-        if annual_increase=='':
-            annual_increase=generals[-1].annual_increase
-        number_years = request.form["number_years"]
-        if number_years=='':
-            number_years=generals[-1].number_years
-        general=General(unit_name=unit_name,energy_price=energy_price,annual_increase=annual_increase,number_years=number_years)
-        try:
-            db.session.query(General).delete()
-            db.session.add(general)
-            db.session.commit()
-            return redirect(url_for('form_page'))
-        except:
-            return "При добалении данных произошла ошибка"
+        if request.form["unit_name"]!='':
+            unit_name = request.form["unit_name"]
+        if request.form["energy_price"]!='':
+            energy_price = request.form["energy_price"]
+        if request.form["annual_increase"]!='':
+            annual_increase = request.form["annual_increase"]
+        if request.form["number_years"] != '':
+            number_years = request.form["number_years"]
+        return redirect(url_for('form_page'))
+        # generals = General.query.all()
+        # unit_name = request.form["unit_name"]
+        # if unit_name=='':
+        #     unit_name=generals[-1].unit_name
+        # energy_price = request.form["energy_price"]
+        # if energy_price=='':
+        #     energy_price=generals[-1].energy_price
+        # annual_increase = request.form["annual_increase"]
+        # if annual_increase=='':
+        #     annual_increase=generals[-1].annual_increase
+        # number_years = request.form["number_years"]
+        # if number_years=='':
+        #     number_years=generals[-1].number_years
+        # general=General(unit_name=unit_name,energy_price=energy_price,annual_increase=annual_increase,number_years=number_years)
+        # try:
+        #     db.session.query(General).delete()
+        #     db.session.add(general)
+        #     db.session.commit()
+        #     return redirect(url_for('form_page'))
+        # except:
+        #     return "При добалении данных произошла ошибка"
     else:
         return render_template('form_page.html', generals=generals, energy_price=energy_price,annual_increase=annual_increase,number_years=number_years)
 
 @app.route('/form_page/add_point', methods=['POST','GET'])
 def form_page_add_point():
-    points = Point.query.all()
-    eff_driver = 0
-    eff_other = 0
-    power_pump = 0
-    power_aux = 0
-    scenario = 0
+    global n3
+    # points = Point.query.all()
+    # eff_driver = 0
+    # eff_other = 0
+    # power_pump = 0
+    # power_aux = 0
+    # scenario = 0
     if request.method=="POST":
-        points = Point.query.all()
-        eff_driver = request.form["eff_driver"]
-        eff_other = request.form["eff_other"]
-        power_pump = request.form["power_pump"]
-        power_aux = request.form["power_aux"]
-        scenario = request.form["scenario"]
-        sum=0
-        for point in points:
-            sum += point.scenario
-        if sum+int(scenario)>12:
+        #points = Point.query.all()
+        eff_driver = int(request.form["eff_driver"])
+        eff_other = int(request.form["eff_other"])
+        power_pump = int(request.form["power_pump"])
+        power_aux = int(request.form["power_aux"])
+        scenario = int(request.form["scenario"])
+        sum = 0
+        for i in range(len(user_points)):
+            sum += int(user_points[i][4])
+        if sum + int(scenario) > 12:
             return "Sum of operating scenarios should not be more than 12 months/year "
-        point=Point(eff_driver=eff_driver,eff_other=eff_other,power_pump=power_pump,power_aux=power_aux,scenario=scenario)
+        user_points.append([eff_driver, eff_other, power_pump,power_aux,scenario, n3])
+
+        #point=Point(eff_driver=eff_driver,eff_other=eff_other,power_pump=power_pump,power_aux=power_aux,scenario=scenario)
         try:
-            db.session.add(point)
-            db.session.commit()
+            #db.session.add(point)
+            #db.session.commit()
             return redirect(url_for('form_page'))
         except:
             return "При добалении данных произошла ошибка"
@@ -213,33 +236,41 @@ def form_page_add_point():
 
 @app.route('/form_page/<int:id>/del_man')
 def delete_maintenance(id):
-    maintenance = Maintenance.query.get_or_404(id)
+    global user_maintenances
+    #     maintenance = Maintenance.query.get_or_404(id)
+#     try:
+#         db.session.delete(maintenance)
+#         db.session.commit()
+#         return redirect('/form_page')
     try:
-        db.session.delete(maintenance)
-        db.session.commit()
+        user_maintenances.pop(id)
         return redirect('/form_page')
     except:
         return "При удалении сведений об обслуживании произошла ошибка"
 
 @app.route('/form_page/<int:id>/del_point')
 def delete_point(id):
-    point = Point.query.get_or_404(id)
+    global user_points
+    #point = Point.query.get_or_404(id)
     try:
-        db.session.delete(point)
-        db.session.commit()
+        #db.session.delete(point)
+        #db.session.commit()
+        user_points.pop(id)
         return redirect('/form_page')
     except:
         return "При удалении operating point произошла ошибка"
 
-
-
-
 @app.route('/form_page/<int:id>/del')
 def delete_component(id):
-    unit_component = Component.query.get_or_404(id)
+    global user_components
+
+    # unit_component = Component.query.get_or_404(id)
+    # try:
+    #     db.session.delete(unit_component)
+    #     db.session.commit()
+    #     return redirect('/form_page')
     try:
-        db.session.delete(unit_component)
-        db.session.commit()
+        user_components.pop(id)
         return redirect('/form_page')
     except:
         return "При удалении компонента произошла ошибка"
@@ -250,14 +281,17 @@ def maintenance():
      maintenances = Maintenance.query.all()
      prices=[]
      per=[]
-     for maintenance in maintenances:
-         prices.append(maintenance.main_price)
-         per.append(maintenance.period)
+     for maintenance in user_maintenances:
+         prices.append(int(maintenance[2]))
+         per.append(int(maintenance[1]))
+     # for maintenance in maintenances:
+     #     prices.append(maintenance.main_price)
+     #     per.append(maintenance.period)
 
-     generals = General.query.all()
-     unit_name = generals[0].unit_name
-     annual_increase = generals[-1].annual_increase #annual_increase = 1.5
-     n=generals[-1].number_years #n = 30
+     #generals = General.query.all()
+     #unit_name = generals[0].unit_name
+     #annual_increase = generals[-1].annual_increase
+     n=int(number_years)
      #[maintenances[-1].period,maintenances[-1].main_price]
      main_type = 0
      period = 0
@@ -297,8 +331,8 @@ def maintenance():
 
 @app.route('/efficiency', methods=['POST','GET'])
 def efficiency():
-    generals = General.query.all()
-    points = Point.query.all()
+    #generals = General.query.all()
+    #points = Point.query.all()
 
     # eff_driver = points[0].eff_driver
     # eff_other = points[0].eff_other
@@ -306,10 +340,10 @@ def efficiency():
     # power_aux = points[0].power_aux
     # scenario = points[0].scenario
 
-    unit_name = generals[-1].unit_name
-    energy_price = generals[-1].energy_price
-    annual_increase = generals[-1].annual_increase
-    return render_template('efficiency.html',unit_name=unit_name,energy_price=energy_price,annual_increase=annual_increase,points=points)
+    # unit_name = generals[-1].unit_name
+    # energy_price = generals[-1].energy_price
+    # annual_increase = generals[-1].annual_increase
+    return render_template('efficiency.html',user_points=user_points,unit_name=unit_name,energy_price=energy_price,annual_increase=annual_increase)
 
 @app.route('/energy', methods=['POST','GET'])
 def energy():
@@ -322,25 +356,30 @@ def tco():
 
 @app.route('/capex', methods=['POST','GET'])
 def capex():
-    unit_components = Component.query.all()
-    generals = General.query.all()
-    unit_name = generals[0].unit_name
+    # unit_components = Component.query.all()
+    # generals = General.query.all()
+    # unit_name = generals[0].unit_name
     total_capex_direct=0
     direct=[]
-    for i in range(len(unit_components)):
-        total_capex_direct+=unit_components[i].component_price
-        direct.append(unit_components[i].component_price)
+    # for i in range(len(unit_components)):
+    #     total_capex_direct+=unit_components[i].component_price
+    #     direct.append(unit_components[i].component_price)
+    # direct.append(total_capex_direct)
+
+    for i in range(len(user_components)):
+        total_capex_direct+=int(user_components[i][1])
+        direct.append(int(user_components[i][1]))
     direct.append(total_capex_direct)
 
     labels=[]
-    for j in range(len(unit_components)):
-        labels.append(unit_components[j].component)
+    # for j in range(len(unit_components)):
+    #     labels.append(unit_components[j].component)
+    # labels.append('total_capex_direct')
+
+    for j in range(len(user_components)):
+        labels.append(user_components[j][0])
     labels.append('total_capex_direct')
 
-    #labels = ['Pump', 'Baseplate', 'Driver','Coupling','Supply_System','Fluid_Coupling','vfd','Lube_oil_system','transformer','harmonic_filter','others','instruments','Total Cost',]
-    #direct = [unit_components[-1].pump, unit_components[-1].baseplate, unit_components[-1].driver, unit_components[-1].coupling, unit_components[-1].Supply_System, unit_components[-1].Fluid_Coupling, unit_components[-1].vfd, unit_components[-1].Lube_oil_system,
-              #unit_components[-1].transformer, unit_components[-1].harmonic_filter, unit_components[-1].others, unit_components[-1].instruments, total_capex_direct]
-    #throttle = [units[-1].pump_throttle, units[-1].baseplate_throttle, units[-1].motor_throttle,total_capex_throttle]
 
     x = np.arange(len(labels))  # the label locations
     width = 0.20  # the width of the bars
@@ -362,11 +401,10 @@ def capex():
     plt.close(fig)
     #plt.savefig('myfig')
 
-
     try:
-        return render_template('capex.html',x=x,unit_name=unit_name,unit_components=unit_components,total_capex_direct=total_capex_direct)
+        return render_template('capex.html',user_components=user_components,x=x,unit_name=unit_name,total_capex_direct=total_capex_direct)
     except:
-        return render_template('capex.html', unit_name=unit_name,unit_components=unit_components, total_capex_direct=total_capex_direct)
+        return render_template('capex.html', user_components=user_components,unit_name=unit_name,total_capex_direct=total_capex_direct)
 
 if __name__=="__main__":
     app.run(debug=True)

@@ -44,6 +44,7 @@ ul {list-style-type: decimal;}
 }
 .input4 {
   grid-area: input4;
+  grid-column:1/3;
   padding-left: 10px;
   background:pink;
 }
@@ -59,10 +60,7 @@ ul {list-style-type: decimal;}
   grid-area: tab3;
   align-self: start;
 }
-.tab4 {
-  grid-area: tab4;
-  align-self: start;
-}
+
 .container {
   display: grid;
   margin-left: 10px;
@@ -70,10 +68,10 @@ ul {list-style-type: decimal;}
   grid-template-columns: 400px 800px;
   grid-template-rows: auto;
   grid-template-areas:
+  "input4 input4"
     "input1 tab1"
     "input2 tab2"
-    "input3 tab3"
-    "input4 tab4";
+    "input3 tab3";
 
 }
 
@@ -110,6 +108,8 @@ ul {list-style-type: decimal;}
   <div class="tab-pane fade" id="maintenance" role="tabpanel" aria-labelledby="maintenance"></div>
   <div class="tab-pane fade" id="tco" role="tabpanel" aria-labelledby="tco"></div>
 </div>
+
+
 <section class="container">
   <div class="input1">
       <fieldset>
@@ -131,18 +131,8 @@ ul {list-style-type: decimal;}
    <option value="">
       {% for a in component_list%}
        <option>{{a}}
-   <!--<option>pump-->
-   <!--<option>baseplate-->
-   <!--<option>driver-->
-   <!--<option>coupling-->
-   <!--<option>Supply_System-->
-   <!--<option>Fluid_Coupling-->
-   <!--<option>vfd-->
-   <!--<option>Lube_oil_system-->
-   <!--<option>transformer-->
-   <!--<option>harmonic_filter-->
-   <!--<option>others-->
-   <!--<option>instruments-->
+
+
       {% endfor %}
   </select>
  </label>
@@ -165,6 +155,17 @@ ul {list-style-type: decimal;}
     </fieldset>
   </div>
   <div class="tab1">
+           <!--{% for i in unit_components %}-->
+            <!--<tr >-->
+              <!--<td class="counterCell"></td>-->
+              <!--<td>{{i.component}}</td>-->
+              <!--<td>{{i.component_price}}</td>-->
+                 <!--<td>{{i.comments}}</td>-->
+                <!--<td><a class="btn btn-warning" href='/form_page/{{i.id}}/del'>Delete</a></td>-->
+                 <!--</tr>-->
+     <!--{% endfor %}-->
+          <!--</tbody>-->
+        <!--</table>-->
       <table class="table table-striped table-sm">
           <thead>
             <tr>
@@ -176,13 +177,13 @@ ul {list-style-type: decimal;}
                  </tr>
           </thead>
      <tbody>
-     {% for i in unit_components %}
+     {% for i in user_components %}
             <tr >
               <td class="counterCell"></td>
-              <td>{{i.component}}</td>
-              <td>{{i.component_price}}</td>
-                 <td>{{i.comments}}</td>
-                <td><a class="btn btn-warning" href='/form_page/{{i.id}}/del'>Delete</a></td>
+              <td>{{i[0]}}</td>
+              <td>{{i[1]}}</td>
+                 <td>{{i[2]}}</td>
+                <td><a class="btn btn-warning" href='/form_page/{{i[3]}}/del'>Delete</a></td>
                  </tr>
      {% endfor %}
           </tbody>
@@ -240,17 +241,27 @@ ul {list-style-type: decimal;}
                  </tr>
           </thead>
      <tbody>
-     {% for j in maintenances %}
-            <tr height="15px">
+     <!--{% for j in maintenances %}-->
+            <!--<tr height="15px">-->
+              <!--<td class="counterCell"></td>-->
+              <!--<td>{{j.main_type}}</td>-->
+              <!--<td>{{j.period}}</td>-->
+              <!--<td>{{j.main_price}}</td>-->
+                <!--<td>{{j.main_comments}}</td>-->
+              <!--<td><a class="btn btn-warning" href='/form_page/{{j.id}}/del_man'>Delete</a></td>-->
+            <!--</tr>-->
+     <!--{% endfor %}-->
+     {% for j in user_maintenances %}
+            <tr >
               <td class="counterCell"></td>
-              <td>{{j.main_type}}</td>
-              <td>{{j.period}}</td>
-              <td>{{j.main_price}}</td>
-                <td>{{j.main_comments}}</td>
-              <td><a class="btn btn-warning" href='/form_page/{{j.id}}/del_man'>Delete</a></td>
-            </tr>
+              <td>{{j[0]}}</td>
+              <td>{{j[1]}}</td>
+                 <td>{{j[2]}}</td>
+                                 <td>{{j[3]}}</td>
+                <td><a class="btn btn-warning" href='/form_page/{{j[4]}}/del_man'>Delete</a></td>
+                 </tr>
      {% endfor %}
-          </tbody>
+     </tbody>
         </table>
   </div>
   <div class="input3">
@@ -290,17 +301,29 @@ ul {list-style-type: decimal;}
                 <th scope="col">Operating Scenario, months / year</th>
                 <th scope="col">Delete</th>
           </thead>
-     <tbody>{% for k in points %}
-            <tr>
-                <td class="counterCell"></td>
-                <td> {{k.eff_driver}}</td>
-                <td> {{k.eff_other}}</td>
-                <td> {{k.power_pump}}</td>
-                <td> {{k.power_aux}}</td>
-                <td> {{k.scenario}}</td>
-                <td><a class="btn btn-warning" href='/form_page/{{k.id}}/del_point'>Delete</a></td>
-            </tr>
-            {% endfor %}
+     <tbody>
+     {% for k in user_points %}
+            <tr >
+              <td class="counterCell"></td>
+              <td>{{k[0]}}</td>
+              <td>{{k[1]}}</td>
+               <td>{{k[2]}}</td>
+               <td>{{k[3]}}
+               <td>{{k[4]}}</td>
+                <td><a class="btn btn-warning" href='/form_page/{{k[5]}}/del_point'>Delete</a></td>
+                 </tr>
+     {% endfor %}
+     <!--{% for k in points %}-->
+            <!--<tr>-->
+                <!--<td class="counterCell"></td>-->
+                <!--<td> {{k.eff_driver}}</td>-->
+                <!--<td> {{k.eff_other}}</td>-->
+                <!--<td> {{k.power_pump}}</td>-->
+                <!--<td> {{k.power_aux}}</td>-->
+                <!--<td> {{k.scenario}}</td>-->
+                <!--<td><a class="btn btn-warning" href='/form_page/{{k.id}}/del_point'>Delete</a></td>-->
+            <!--</tr>-->
+            <!--{% endfor %}-->
      </tbody>
         </table>
       <div style="color:red">{{message}}</div>
@@ -309,53 +332,60 @@ ul {list-style-type: decimal;}
 
 <p></p>
      <div class="input4">
-<fieldset id="economy" style="width:400px">
+<fieldset id="economy" style="width:1000px" Grid.ColumnSpan="2">
 
+    <table>
 
     <legend align="center"><b>General </b></legend>
     <form action="/form_page/add_general" method="POST" name="general">
-
- <label for="unit_name">Unit name     </label>(Current unit name: {{unit_name}})
+<tr>
+    <td><p><label for="unit_name">Unit name     </label></p>
     <input type="text" name="unit_name" id="unit_name" class="form-control form-control-sm" >
         <p>Current unit name: {{unit_name}}</p>
-
-   <p><label for="energy_price">Energy Price, EUR/kWh</label> (Current Energy Price: {{energy_price}}, EUR/kWh)</p>
-    <p><input type="number" name="energy_price" id="energy_price" placeholder="0" min="0" step="0.01" class="form-control form-control-sm" required></p>
+ </td>
+    <td>
+   <p><label for="energy_price">Energy Price, EUR/kWh</label></p>
+    <input type="number" name="energy_price" id="energy_price" placeholder="0" min="0" step="0.01" class="form-control form-control-sm" required>
         <p>Current Energy Price: {{energy_price}}, EUR/kWh</p>
-
-    <p><label for="annual_increase">Annual Price Increase, %</label> (Current Annual Price Increase: {{annual_increase}}, %)</p>
-    <p><input type="number" name="annual_increase" id="annual_increase" placeholder="0" min=0 step="0.01" class="form-control form-control-sm" required></p>
-
-    <p><label for="number_years">Number of years</label>  (Current Number of years: {{number_years}})</p>
-    <p><input type="number" name="number_years" id="number_years" placeholder="0" min=0 step="1" class="form-control form-control-sm" required></p>
-
+    </td>
+    <td>
+    <p><label for="annual_increase">Annual Price Increase, %</label> </p>
+    <input type="number" name="annual_increase" id="annual_increase" placeholder="0" min=0 step="0.01" class="form-control form-control-sm" required>
+        <p>(Current Annual Price Increase: {{annual_increase}}, %)</p>
+    </td>
+    <td>
+    <p><label for="number_years">Number of years</label>  </p>
+    <input type="number" name="number_years" id="number_years" placeholder="0" min=0 step="1" class="form-control form-control-sm" required>
+        <p>(Current Number of years: {{number_years}})</p>
+    </td>
+</tr>
 
 	<button type="submit" onclick="document.forms.general.submit()">Update data</button>
-
-</form>
+    </form>
+</table>
 </fieldset>
      </div>
-<div class="tab4">
-      <table class="table table-striped table-sm">
-          <thead>
-          <th scope="col">#</th>
-              <th scope="col">Unit name</th>
-              <th scope="col">Energy Price, EUR/kWh</th>
-                <th scope="col">Annual Price Increase, % </th>
-                <th scope="col"> Number of years</th>
-          </thead>
-     <tbody>{% for m in generals %}
-            <tr>
-                <td class="counterCell"></td>
-                <td> {{m.unit_name}}</td>
-                <td> {{m.energy_price}}</td>
-                <td> {{m.annual_increase}}</td>
-                <td> {{m.number_years}}</td>
-            </tr>
-            {% endfor %}
-     </tbody>
-        </table>
-  </div>
+<!--<div class="tab4">-->
+      <!--<table class="table table-striped table-sm">-->
+          <!--<thead>-->
+          <!--<th scope="col">#</th>-->
+              <!--<th scope="col">Unit name</th>-->
+              <!--<th scope="col">Energy Price, EUR/kWh</th>-->
+                <!--<th scope="col">Annual Price Increase, % </th>-->
+                <!--<th scope="col"> Number of years</th>-->
+          <!--</thead>-->
+     <!--<tbody>{% for m in generals %}-->
+            <!--<tr>-->
+                <!--<td class="counterCell"></td>-->
+                <!--<td> {{m.unit_name}} or {{unit_name}}</td>-->
+                <!--<td> {{m.energy_price}} or {{energy_price}}</td>-->
+                <!--<td> {{m.annual_increase}} or {{annual_increase}}</td>-->
+                <!--<td> {{m.number_years}} or {{number_years}}</td>-->
+            <!--</tr>-->
+            <!--{% endfor %}-->
+     <!--</tbody>-->
+        <!--</table>-->
+  <!--</div>-->
 </section>
 </div>
 </div>

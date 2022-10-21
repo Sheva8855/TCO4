@@ -59,17 +59,17 @@ Efficiency & Power Consumption
             </tr>
           </thead>
      <tbody>
-     {% for i in points %}
+     {% for i in user_points %}
             <tr>
               <td class="counterCell"></td>
-              <td>{{i.eff_driver}}</td>
-              <td>{{i.eff_other}}</td>
-              <td>{{i.power_pump}}</td>
-              <td>{{i.power_aux}}</td>
-              <td>{{i.power_aux+i.power_pump}}</td>
-              <td>{{i.scenario}}</td>
-               <td>{{i.scenario*725}}</td>
-              <td>{{i.power_aux*8760+i.power_pump*8760}}</td>
+              <td>{{i[0]}}</td>
+              <td>{{i[1]}}</td>
+              <td>{{i[2]}}</td>
+              <td>{{i[3]}}</td>
+              <td>{{i[2]+i[3]}}</td>
+              <td>{{i[4]}}</td>
+               <td>{{i[4]*725}}</td>
+              <td>{{i[2]*8760+i[3]*8760}}</td>
 
             </tr>
      {% endfor %}
