@@ -5,48 +5,8 @@ from matplotlib.pyplot import figure
 import numpy as np
 app=Flask( __name__ )
 app.secret_key='BAD_SECRET_KEY'
-app.config['SQLALCHEMY_DATABASE_URI']='sqlite:///tco.db'
-db=SQLAlchemy(app)
-
-class Component(db.Model):
-    id=db.Column(db.Integer, primary_key=True)
-    component = db.Column(db.String(30), nullable=False)
-    comments = db.Column(db.String(30), nullable=False)
-    component_price=db.Column(db.Integer, nullable=False)
-
-    def __repr__(self):
-        return '<Component %r>' % self.id
-
-class General(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    unit_name = db.Column(db.String(30), nullable=False)
-    energy_price = db.Column(db.Float, nullable=False, default=0.04)
-    annual_increase = db.Column(db.Float, nullable=False, default=1.5)
-    number_years = db.Column(db.Integer, nullable=False, default=30)
-
-    def __repr__(self):
-        return '<General %r>' % self.id
-
-class Point(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    eff_driver = db.Column(db.Float, nullable=False)
-    eff_other = db.Column(db.Float, nullable=False)
-    power_pump = db.Column(db.Float, nullable=False)
-    power_aux = db.Column(db.Float, nullable=False)
-    scenario = db.Column(db.Integer, nullable=False)
-
-    def __repr__(self):
-        return '<Point %r>' % self.id
-
-class Maintenance (db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    main_type = db.Column(db.String(30), nullable=False)
-    period = db.Column(db.Integer, nullable=False)
-    main_price = db.Column(db.Integer, nullable=False)
-    main_comments = db.Column(db.String(30), nullable=False)
-
-    def __repr__(self):
-        return '<Maintenance %r>' % self.id
+# app.config['SQLALCHEMY_DATABASE_URI']='sqlite:///tco.db'
+# db=SQLAlchemy(app)
 
 component_list=['Pump','Baseplate','Driver','Coupling','Supply_System','Fluid_Coupling','VFD','Lube_Oil_System','Transformer','Harmonic_filter','Instruments','Others']
 user_components = []
@@ -59,7 +19,10 @@ annual_increase=1.5
 number_years = 30
 n1=1
 n2=1
-n3=1
+n3=0
+capexy=0
+main=0
+energie=0
 
 
 #Главная страница формы
@@ -71,12 +34,16 @@ def form_page():
         user_components[i][3] = i
     for y in range(len(user_maintenances)):
         user_maintenances[y][4] = y
+    for z in range(len(user_points)):
+        user_points[z][5] = z
+    # for z in range(len(user_points)):
+    #     user_points[z][5] = z
     #unit_components = Component.query.all()
     component=0
     component_price=0
     comments=0
 
-    maintenances = Maintenance.query.all()
+    # maintenances = Maintenance.query.all()
     main_type = 0
     period = 0
     main_price = 0
@@ -121,10 +88,7 @@ def form_page_add_component():
         n1+=1
         for i in range(len(user_components)):
             user_components[i][3] = i
-        unit_component=Component(component=component,component_price=component_price,comments=comments)
         try:
-            db.session.add(unit_component)
-            db.session.commit()
             return redirect(url_for('form_page'))
         except:
             return "При добалении данных произошла ошибка"
@@ -213,6 +177,8 @@ def form_page_add_point():
         #points = Point.query.all()
         eff_driver = int(request.form["eff_driver"])
         eff_other = int(request.form["eff_other"])
+        if eff_driver>100 or eff_driver<0 or eff_other>100 or eff_other<0:
+            return "Efficiency values should be in range from 0 to 100"
         power_pump = int(request.form["power_pump"])
         power_aux = int(request.form["power_aux"])
         scenario = int(request.form["scenario"])
@@ -221,8 +187,8 @@ def form_page_add_point():
             sum += int(user_points[i][4])
         if sum + int(scenario) > 12:
             return "Sum of operating scenarios should not be more than 12 months/year "
-        user_points.append([eff_driver, eff_other, power_pump,power_aux,scenario, n3])
-
+        user_points.append([eff_driver, eff_other, power_pump,power_aux,scenario, n3,0,0,0])
+        n3 += 1
         #point=Point(eff_driver=eff_driver,eff_other=eff_other,power_pump=power_pump,power_aux=power_aux,scenario=scenario)
         try:
             #db.session.add(point)
@@ -277,8 +243,7 @@ def delete_component(id):
 
 @app.route('/maintenance', methods=['POST','GET'])
 def maintenance():
-     unit_components = Component.query.all()
-     maintenances = Maintenance.query.all()
+     global main
      prices=[]
      per=[]
      for maintenance in user_maintenances:
@@ -292,11 +257,6 @@ def maintenance():
      #unit_name = generals[0].unit_name
      #annual_increase = generals[-1].annual_increase
      n=int(number_years)
-     #[maintenances[-1].period,maintenances[-1].main_price]
-     main_type = 0
-     period = 0
-     main_price = 0
-     main_comments = 0
 
      i = 1
      x = 0
@@ -308,7 +268,7 @@ def maintenance():
          mains.append(round(x))
          i+=1
 
-
+     main=mains[-1]
      a = np.array(mains)
 #     b = np.array(main_vfd)
      plt.switch_backend('agg')
@@ -334,31 +294,93 @@ def efficiency():
     #generals = General.query.all()
     #points = Point.query.all()
 
-    # eff_driver = points[0].eff_driver
-    # eff_other = points[0].eff_other
-    # power_pump = points[0].power_pump
-    # power_aux = points[0].power_aux
-    # scenario = points[0].scenario
-
+    for i in user_points:
+        dr1=round((i[2] + i[3]) / (i[0] * i[1]) * 10000,2)
+        dr2=round(dr1-(i[2] + i[3]),2)
+        dr3=round(((i[2]+i[3])/(i[0]*i[1])*10000-(i[2]+i[3]))*(i[4]*725),2)
+        i[6]=dr1
+        i[7]=dr2
+        i[8]=dr3
+    total_loss=0
+    for i in user_points:
+        total_loss+=i[8]
+    dr4=round(total_loss*float(energy_price),2)
     # unit_name = generals[-1].unit_name
     # energy_price = generals[-1].energy_price
     # annual_increase = generals[-1].annual_increase
-    return render_template('efficiency.html',user_points=user_points,unit_name=unit_name,energy_price=energy_price,annual_increase=annual_increase)
+    return render_template('efficiency.html',dr4=dr4,total_loss=total_loss,user_points=user_points,unit_name=unit_name,energy_price=energy_price,annual_increase=annual_increase)
 
 @app.route('/energy', methods=['POST','GET'])
 def energy():
+    global energie
+    n = int(number_years)
+    years = range(1, n + 1)
+    costs=[]
+    for i in user_points:
+        dr1=round((i[2] + i[3]) / (i[0] * i[1]) * 10000,2)
+        dr2=round(dr1-(i[2] + i[3]),2)
+        dr3=round(((i[2]+i[3])/(i[0]*i[1])*10000-(i[2]+i[3]))*(i[4]*725),2)
+        i[6] = dr1
+        i[7] = dr2
+        i[8] = dr3
+    total_loss = 0
+    for i in user_points:
+        total_loss += i[8]
+    dr4 = round(total_loss * float(energy_price), 2)
+    dr5=0
+    for i in range(1,n+1):
+        dr5+=dr4*(1 + (float(annual_increase) / 100)) ** (i - 1)
+        costs.append(round(dr5,2))
+    energie=costs[-1]
+    return render_template('energy.html',costs=costs,years=years,energy_price=energy_price,annual_increase=annual_increase)
 
-    return render_template('energy.html')
 
 @app.route('/tco', methods=['POST', 'GET'])
 def tco():
-        return render_template('tco.html')
+    global capexy, main
+    total_capex_direct = 0
+    direct = []
+
+    for i in range(len(user_components)):
+        total_capex_direct += int(user_components[i][1])
+        direct.append(int(user_components[i][1]))
+    direct.append(total_capex_direct)
+    capexy = total_capex_direct
+
+    prices = []
+    per = []
+    for maintenance in user_maintenances:
+        prices.append(int(maintenance[2]))
+        per.append(int(maintenance[1]))
+    n = int(number_years)
+    i = 1
+    x = 0
+    mains = []
+    while i <= n:
+        for j in range(len(per)):
+            if i % per[j] == 0:
+                x += prices[j] * (1 + (annual_increase / 100)) ** (i - 1)
+        mains.append(round(x))
+        i += 1
+
+    main = mains[-1]
+
+    labels = 'CAPEX', 'Maintenance', 'Energy'
+    if capexy>0 and main>0 and energie>0:
+        sizes = [capexy, main, energie]
+        #explode = (0, 0, 0)  # only "explode" the 2nd slice (i.e. 'Hogs')  autopct='%1.1f%%'
+
+        fig1, ax1 = plt.subplots()
+        ax1.pie(sizes, labels=labels,
+            shadow=True, startangle=90)
+        ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+        plt.savefig('static/tco.png')
+
+    return render_template('tco.html',capexy=capexy,main=main,energie=energie)
 
 @app.route('/capex', methods=['POST','GET'])
 def capex():
-    # unit_components = Component.query.all()
-    # generals = General.query.all()
-    # unit_name = generals[0].unit_name
+    global capexy
     total_capex_direct=0
     direct=[]
     # for i in range(len(unit_components)):
@@ -370,7 +392,7 @@ def capex():
         total_capex_direct+=int(user_components[i][1])
         direct.append(int(user_components[i][1]))
     direct.append(total_capex_direct)
-
+    capexy=total_capex_direct
     labels=[]
     # for j in range(len(unit_components)):
     #     labels.append(unit_components[j].component)

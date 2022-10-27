@@ -271,10 +271,10 @@ ul {list-style-type: decimal;}
     <div class="form-row">
     <div class="col-md-8 mb-3">
     <label for="eff_driver">Efficiency - Electric Motor, %</label>
-    <div text-align="right"><input type="number" name="eff_driver" id="eff_driver" placeholder="0" min=0 max="100" class="form-control form-control-sm" required></div><p></p>
+    <div text-align="right"><input type="number" name="eff_driver" id="eff_driver" placeholder="0" min="0" max="100" class="form-control form-control-sm" required></div><p></p>
 
 	   <label for="eff_other">Efficiency - (VFD or Fluid Coupling or others), %</label>
-    <input type="number" name="eff_other" id="eff_other" placeholder="0" min=0 max="100" class="form-control form-control-sm" required><p></p>
+    <input type="number" name="eff_other" id="eff_other" placeholder="0" min="0" max="100" class="form-control form-control-sm" required><p></p>
 
             <label for="power_pump">Power Consumption - Pump, kW</label>
    <input type="number" name="power_pump" id="power_pump" placeholder="0" min="0" class="form-control form-control-sm" required><p></p>
@@ -296,7 +296,7 @@ ul {list-style-type: decimal;}
           <th scope="col">#</th>
               <th scope="col">Efficiency - Electric Motor, %</th>
                 <th scope="col">Efficiency - Others, %</th>
-                <th scope="col">Power Consumption, kW</th>
+                <th scope="col">Pump Power Consumption, kW</th>
                 <th scope="col">Power - Auxilliaries, kW </th>
                 <th scope="col">Operating Scenario, months / year</th>
                 <th scope="col">Delete</th>
@@ -341,22 +341,22 @@ ul {list-style-type: decimal;}
 <tr>
     <td><p><label for="unit_name">Unit name     </label></p>
     <input type="text" name="unit_name" id="unit_name" class="form-control form-control-sm" >
-        <p>Current unit name: {{unit_name}}</p>
+        <p>Current: {{unit_name}}</p>
  </td>
     <td>
    <p><label for="energy_price">Energy Price, EUR/kWh</label></p>
     <input type="number" name="energy_price" id="energy_price" placeholder="0" min="0" step="0.01" class="form-control form-control-sm" required>
-        <p>Current Energy Price: {{energy_price}}, EUR/kWh</p>
+        <p>Current: {{energy_price}} EUR/kWh</p>
     </td>
     <td>
     <p><label for="annual_increase">Annual Price Increase, %</label> </p>
     <input type="number" name="annual_increase" id="annual_increase" placeholder="0" min=0 step="0.01" class="form-control form-control-sm" required>
-        <p>(Current Annual Price Increase: {{annual_increase}}, %)</p>
+        <p>Current: {{annual_increase}}%</p>
     </td>
     <td>
     <p><label for="number_years">Number of years</label>  </p>
     <input type="number" name="number_years" id="number_years" placeholder="0" min=0 step="1" class="form-control form-control-sm" required>
-        <p>(Current Number of years: {{number_years}})</p>
+        <p>Current: {{number_years}} years</p>
     </td>
 </tr>
 

@@ -49,12 +49,16 @@ Efficiency & Power Consumption
               <th scope="col">#</th>
               <th scope="col">Efficiency - Electric Motor, %</th>
               <th scope="col">Efficiency - Others, %</th>
-              <th scope="col">Power Consumption, kW</th>
+              <th scope="col">Pump Power Consumption, kW</th>
               <th scope="col">Power - Auxilliaries, kW</th>
               <th scope="col">Total power consumption,kW</th>
+              <th scope="col">Power Consumption - Drive Train, kW</th>
+              <th scope="col">Drive Train - Power Losses with Auxillaries, kW</th>
+              <th scope="col">Drive Train - Total Losses / year per operating point, kWh</th>
               <th scope="col">Operating Scenario, months / year</th>
               <th scope="col">Operating Scenario, hours / year</th>
               <th scope="col">Total Power Consumption per year, Σ kWh</th>
+
 
             </tr>
           </thead>
@@ -67,6 +71,9 @@ Efficiency & Power Consumption
               <td>{{i[2]}}</td>
               <td>{{i[3]}}</td>
               <td>{{i[2]+i[3]}}</td>
+              <td>{{i[6]}}</td>
+              <td>{{i[7]}}</td>
+              <td>{{i[8]}}</td>
               <td>{{i[4]}}</td>
                <td>{{i[4]*725}}</td>
               <td>{{i[2]*8760+i[3]*8760}}</td>
@@ -75,6 +82,8 @@ Efficiency & Power Consumption
      {% endfor %}
           </tbody>
 </table>
-
+{{user_points}}
+<div>Drive Train - Total Losses / year, {{total_loss}} Σ kWh</div>
+<div>Drive Train - Enegry losses + Ext. aux. power cost / year, {{dr4}}EUR</div>
 
 {%endblock%}
