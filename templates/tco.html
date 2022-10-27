@@ -7,7 +7,7 @@ TCO
 
 {%block body%}
 
-<ul class="nav nav-tabs" id="myTab" role="tablist">
+<ul class="nav nav-tabs justify-content-center nav-fill" id="myTab" role="tablist">
   <li class="nav-item" role="presentation">
     <a class="nav-link" id="form" data-bs-toggle="tab" data-bs-target="#Entry form" type="button" role="tab" aria-controls="Entry form" aria-selected="false" href="/form_page">Entry form</a>
   </li>
@@ -40,6 +40,7 @@ TCO
 <p>capex: {{capexy}}</p>
 <p>energy: {{energie}}</p>
 <p>maintenance: {{main}}</p>
+<p>labor cost: </p>
 
 <img src="{{url_for('static', filename='tco.png')}}" align="middle" width="1000" height="500"/>
 {%endblock%}
