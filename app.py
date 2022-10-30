@@ -13,10 +13,12 @@ user_components = []
 user_maintenances = []
 user_points= []
 
+project_name='project 1'
 unit_name='P-001'
 energy_price=0.04
 annual_increase=1.5
 number_years = 30
+currency= 'USD'
 n1=1
 n2=1
 n3=0
@@ -69,7 +71,7 @@ def form_page():
     scenario = 0
     a=0
 
-    return render_template('form_page.html',user_points=user_points,user_maintenances=user_maintenances,user_components=user_components,sum=sum,message=message,component_list=component_list,a=a,m=m,eff_driver=eff_driver,eff_other=eff_other,power_pump=power_pump,power_aux=power_aux,scenario=scenario,k=k, i=i,j=j,component=component,component_price=component_price, comments=comments, main_type=main_type, period=period,main_price=main_price, main_comments=main_comments, unit_name=unit_name, energy_price=energy_price, annual_increase=annual_increase, number_years=number_years )
+    return render_template('form_page.html',user_points=user_points,user_maintenances=user_maintenances,user_components=user_components,sum=sum,message=message,component_list=component_list,a=a,m=m,eff_driver=eff_driver,eff_other=eff_other,power_pump=power_pump,power_aux=power_aux,scenario=scenario,k=k, i=i,j=j,component=component,component_price=component_price, comments=comments, main_type=main_type, period=period,main_price=main_price, main_comments=main_comments, unit_name=unit_name, energy_price=energy_price, annual_increase=annual_increase, number_years=number_years,project_name=project_name, currency=currency )
 
 #Обработка формы добавление компонента
 @app.route('/form_page/add_component', methods=['POST','GET'])
@@ -127,10 +129,14 @@ def form_page_add_maintenance():
 #Обработка формы добавление общих данных
 @app.route('/form_page/add_general', methods=['POST','GET'])
 def form_page_add_general():
-    global unit_name,energy_price,annual_increase,number_years
+    global unit_name,energy_price,annual_increase,number_years,project_name,currency
     #generals = General.query.all()
 
     if request.method=="POST":
+        if request.form["currency"]!='':
+            currency = request.form["currency"]
+        if request.form["project_name"]!='':
+            project_name = request.form["project_name"]
         if request.form["unit_name"]!='':
             unit_name = request.form["unit_name"]
         if request.form["energy_price"]!='':
@@ -162,7 +168,7 @@ def form_page_add_general():
         # except:
         #     return "При добалении данных произошла ошибка"
     else:
-        return render_template('form_page.html', generals=generals, energy_price=energy_price,annual_increase=annual_increase,number_years=number_years)
+        return render_template('form_page.html', project_name=project_name,generals=generals, energy_price=energy_price,annual_increase=annual_increase,number_years=number_years)
 
 @app.route('/form_page/add_point', methods=['POST','GET'])
 def form_page_add_point():
@@ -264,7 +270,7 @@ def maintenance():
      while i <= n:
          for j in range(len(per)):
              if i%per[j]==0:
-                x+=prices[j] * (1 + (annual_increase / 100)) ** (i - 1)
+                x+=prices[j] * (1 + (float(annual_increase) / 100)) ** (i - 1)
          mains.append(round(x))
          i+=1
 
@@ -285,7 +291,7 @@ def maintenance():
      years=range(1,n+1)
      # plt.show()
      # plt.close(fig)
-     return render_template('maintenance.html',mains=mains,a=a, years=years, unit_name=unit_name)
+     return render_template('maintenance.html',mains=mains,a=a, years=years, unit_name=unit_name, currency=currency)
 
 #Конец обработки форм
 
@@ -332,7 +338,7 @@ def energy():
         dr5+=dr4*(1 + (float(annual_increase) / 100)) ** (i - 1)
         costs.append(round(dr5,2))
     energie=costs[-1]
-    return render_template('energy.html',costs=costs,years=years,energy_price=energy_price,annual_increase=annual_increase)
+    return render_template('energy.html',costs=costs,years=years,energy_price=energy_price,annual_increase=annual_increase, currency=currency)
 
 
 @app.route('/tco', methods=['POST', 'GET'])
@@ -372,11 +378,11 @@ def tco():
 
         fig1, ax1 = plt.subplots()
         ax1.pie(sizes, labels=labels,
-            shadow=True, startangle=90)
+            shadow=False, startangle=90)
         ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
         plt.savefig('static/tco.png')
 
-    return render_template('tco.html',capexy=capexy,main=main,energie=energie)
+    return render_template('tco.html',capexy=capexy,main=main,energie=energie, currency=currency)
 
 @app.route('/capex', methods=['POST','GET'])
 def capex():
@@ -424,7 +430,7 @@ def capex():
     #plt.savefig('myfig')
 
     try:
-        return render_template('capex.html',user_components=user_components,x=x,unit_name=unit_name,total_capex_direct=total_capex_direct)
+        return render_template('capex.html',user_components=user_components,x=x,unit_name=unit_name,total_capex_direct=total_capex_direct, currency=currency)
     except:
         return render_template('capex.html', user_components=user_components,unit_name=unit_name,total_capex_direct=total_capex_direct)
 
