@@ -23,8 +23,8 @@ CAPEX
   display: grid;
   margin-left: 10px;
   gap: 10px 10px;
-  grid-template-columns: 400px 1000px;
-  grid-template-rows: 700px;
+  grid-template-columns: 400px 500px;
+  grid-template-rows: auto;
   grid-template-areas:
     "tab image";
     }
@@ -105,7 +105,7 @@ ul {list-style-type: decimal;}
     <b>Total cost: {{total_capex_direct}} {{currency}}</b><br>
   </div>
 <div class="image">
-<img src="{{url_for('static', filename='capex.png')}}" align="middle" alt="Capex pic" width="1000" height="700"/>
+<img src="{{url_for('static', filename='capex2.png')}}" align="middle" alt="Capex pic" width="1000" height="500"/>
 
   </div>
 </section>

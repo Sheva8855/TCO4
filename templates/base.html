@@ -1,7 +1,12 @@
 <!DOCTYPE html>
 <style>
+* {
+  font-family: Arial, Helvetica, sans-serif;
+  color:rgb(0,74,130);
+}
 .header {
-        background-color: #EBEBEB;
+        <!--background-color: #EBEBEB;-->
+        opacity: 0.9;
     }
 </style>
 <html lang="en">
@@ -9,16 +14,28 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
     <link rel="stylesheet" href='https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css'>
-    <title>{%block title%} S-Coupling Calculation Tool - TCO and Savings{%endblock%}</title>
+    <title>{%block title%} Total Cost of Ownership Calculator for Rotating Equipment{%endblock%}</title>
 </head>
 <body style="background-color:white; margin-right: auto; margin-left: auto; width: 100%;">
 <div class="header">
+<table>
+<tr>
+    <td><img src="{{url_for('static', filename='Logo Colour.png')}}" align="middle" width="200" height="100"/></td>
+    <td width="1000px"><p class="text-center">
+
+<span class="h3" style="color:004A82;">Total Cost of Ownership Calculator for Rotating Equipment</span></p>
 <p class="text-center">
-<span class="fs-1">Rotating Equipment TCO Calculator</span></p>
-<p class="text-left">
-<span class="fs-6">Description:  Total Cost of Ownership and comparison of direct drive and different methods of rotating equipment speed regulation (Fluid Coupling vs. Electric Variable Speed Drive). Input fields are in grey area.
-</span></p>
+<span class="fs-6">Calculate CAPEX, Maintenance & Energy Costs for your pump, compressor and other rotating equipment
+</span>
+    </td>
+</tr>
+</table>
+
+
+</p>
 </div>
+<p class="text-center">
+
 
 
 <p></p>

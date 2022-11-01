@@ -1,14 +1,17 @@
-from flask import Flask, render_template, url_for, request, redirect, flash,session
+from flask import Flask, render_template, url_for, request, redirect, flash,session, make_response
 from flask_sqlalchemy import SQLAlchemy
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from matplotlib.pyplot import figure
 import numpy as np
+import pdfkit
 app=Flask( __name__ )
 app.secret_key='BAD_SECRET_KEY'
 # app.config['SQLALCHEMY_DATABASE_URI']='sqlite:///tco.db'
 # db=SQLAlchemy(app)
 
-component_list=['Pump','Baseplate','Driver','Coupling','Supply_System','Fluid_Coupling','VFD','Lube_Oil_System','Transformer','Harmonic_filter','Instruments','Others']
+component_list=['Pump','Compressor','Baseplate','Driver','Coupling','Supply_System','Fluid_Coupling','VFD','Lube_Oil_System','Transformer','Harmonic_filter','Instruments','Fan','Mixer','Diesel','Turbine','Cabinet','Others']
 user_components = []
 user_maintenances = []
 user_points= []
@@ -18,7 +21,7 @@ unit_name='P-001'
 energy_price=0.04
 annual_increase=1.5
 number_years = 30
-currency= 'USD'
+currency= '$'
 n1=1
 n2=1
 n3=0
@@ -133,8 +136,8 @@ def form_page_add_general():
     #generals = General.query.all()
 
     if request.method=="POST":
-        if request.form["currency"]!='':
-            currency = request.form["currency"]
+        # if request.form["currency"]!='':
+        currency = request.form["currency"]
         if request.form["project_name"]!='':
             project_name = request.form["project_name"]
         if request.form["unit_name"]!='':
@@ -145,6 +148,7 @@ def form_page_add_general():
             annual_increase = request.form["annual_increase"]
         if request.form["number_years"] != '':
             number_years = request.form["number_years"]
+        flash('Updated successfully', 'success')
         return redirect(url_for('form_page'))
         # generals = General.query.all()
         # unit_name = request.form["unit_name"]
@@ -282,7 +286,7 @@ def maintenance():
 #     plt.plot(b, label='VFD')
      plt.title('Mainenance Cost for '+ unit_name)
      plt.xlabel('Year')
-     plt.ylabel('Maintenance Cost, EUR')
+     plt.ylabel('Maintenance Cost, ' + currency)
      plt.legend()
      plt.grid()
      plt.xticks(np.arange(1, n + 1, 1.0))
@@ -314,7 +318,7 @@ def efficiency():
     # unit_name = generals[-1].unit_name
     # energy_price = generals[-1].energy_price
     # annual_increase = generals[-1].annual_increase
-    return render_template('efficiency.html',dr4=dr4,total_loss=total_loss,user_points=user_points,unit_name=unit_name,energy_price=energy_price,annual_increase=annual_increase)
+    return render_template('efficiency.html',currency=currency,dr4=dr4,total_loss=total_loss,user_points=user_points,unit_name=unit_name,energy_price=energy_price,annual_increase=annual_increase)
 
 @app.route('/energy', methods=['POST','GET'])
 def energy():
@@ -343,7 +347,7 @@ def energy():
 
 @app.route('/tco', methods=['POST', 'GET'])
 def tco():
-    global capexy, main
+    global capexy, main, energie
     total_capex_direct = 0
     direct = []
 
@@ -369,20 +373,19 @@ def tco():
         mains.append(round(x))
         i += 1
 
-    main = mains[-1]
 
-    labels = 'CAPEX', 'Maintenance', 'Energy'
-    if capexy>0 and main>0 and energie>0:
-        sizes = [capexy, main, energie]
-        #explode = (0, 0, 0)  # only "explode" the 2nd slice (i.e. 'Hogs')  autopct='%1.1f%%'
+    labels = ['CAPEX', 'Maintenance', 'Energy']
+    # if capexy>0 and main>0 and energie>0:
+    sizes = [int(capexy),int(main), int(energie)]
 
-        fig1, ax1 = plt.subplots()
-        ax1.pie(sizes, labels=labels,
-            shadow=False, startangle=90)
-        ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
-        plt.savefig('static/tco.png')
+    fig1, ax1 = plt.subplots()
 
-    return render_template('tco.html',capexy=capexy,main=main,energie=energie, currency=currency)
+    ax1.pie(sizes, labels=labels,shadow=False, startangle=90)
+    # ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+    # plt.savefig('static/tco.png',bbox_inches=None)
+
+
+    return render_template('tco.html',fig1=fig1,capexy=capexy,main=main,energie=energie, currency=currency,sizes=sizes, labels=labels,ax1=ax1)
 
 @app.route('/capex', methods=['POST','GET'])
 def capex():
@@ -392,12 +395,12 @@ def capex():
     # for i in range(len(unit_components)):
     #     total_capex_direct+=unit_components[i].component_price
     #     direct.append(unit_components[i].component_price)
-    # direct.append(total_capex_direct)
+    #direct.append(total_capex_direct)
 
     for i in range(len(user_components)):
         total_capex_direct+=int(user_components[i][1])
         direct.append(int(user_components[i][1]))
-    direct.append(total_capex_direct)
+    # direct.append(total_capex_direct)
     capexy=total_capex_direct
     labels=[]
     # for j in range(len(unit_components)):
@@ -406,33 +409,58 @@ def capex():
 
     for j in range(len(user_components)):
         labels.append(user_components[j][0])
-    labels.append('total_capex_direct')
+    labels.append('total_capex')
 
 
-    x = np.arange(len(labels))  # the label locations
-    width = 0.20  # the width of the bars
-
-
-    fig, ax = plt.subplots(figsize=(15,10))
-    rects1 = ax.bar(x - width / 2, direct, width, label='Total cost')
+    # x = np.arange(len(labels))  # the label locations
+    # width = 0.20  # the width of the bars
+    #
+    #
+    # fig, ax = plt.subplots(figsize=(15,10))
+    # rects1 = ax.bar(x - width / 2, direct, width, label='Total cost')
     #rects2 = ax.bar(x + width / 2, throttle, width, label='Throttle')
 
-    # Add some text for labels, title and custom x-axis tick labels, etc.
-    ax.set_ylabel('EURO')
-    ax.set_title('CAPEX for '+unit_name)
-    ax.set_xticks(x, labels)
-    ax.legend()
 
-    ax.bar_label(rects1, padding=3)
-    #ax.bar_label(rects2, padding=3)
-    fig.savefig('static/capex.png')  # save the figure to file
-    plt.close(fig)
-    #plt.savefig('myfig')
+    # ax.set_ylabel(currency)
+    # ax.set_title('CAPEX for '+unit_name)
+    # ax.set_xticks(x, labels)
+    # ax.legend()
+    #
+    # ax.bar_label(rects1, padding=3)
+    # fig.savefig('static/capex.png')  # save the figure to file
+    # plt.close(fig)
+
+    labels.pop()
+    sizes = direct
+    fig1, ax1 = plt.subplots()
+    ax1.pie(sizes, labels=labels,shadow=False, startangle=90,autopct='%1.0f%%')
+    ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+    plt.savefig('static/capex2.png')
 
     try:
         return render_template('capex.html',user_components=user_components,x=x,unit_name=unit_name,total_capex_direct=total_capex_direct, currency=currency)
     except:
         return render_template('capex.html', user_components=user_components,unit_name=unit_name,total_capex_direct=total_capex_direct)
+
+# @app.route('/create_pdf', methods=['POST','GET'])
+# def create_pdf():
+#     name = "Giovanni Smith"
+#     html = render_template(
+#         "form_page.html",
+#         name=name)
+#     pdf = pdfkit.from_string(html, False)
+#     response = make_response(pdf)
+#     response.headers["Content-Type"] = "application/pdf"
+#     response.headers["Content-Disposition"] = "inline; filename=TCO.pdf"
+#     return redirect('/form_page')
+#     try:
+#         pdf = pdfkit.from_string(html, False)
+#         response = make_response(pdf)
+#         response.headers["Content-Type"] = "application/pdf"
+#         response.headers["Content-Disposition"] = "inline; filename=TCO.pdf"
+#         return redirect('/form_page')
+#     except:
+#         return "Error while creating PDF"
 
 if __name__=="__main__":
     app.run(debug=True)
