@@ -1,4 +1,4 @@
-heroku run printenvatomicwrites==1.4.1
+atomicwrites==1.4.1
 attrs==22.1.0
 certifi==2022.6.15
 charset-normalizer==2.1.1
@@ -27,6 +27,7 @@ numpy==1.23.2
 openpyxl==3.0.10
 packaging==21.3
 pandas==1.4.3
+pdfkit==1.0.0
 Pillow==9.2.0
 platformdirs==2.5.2
 pluggy==1.0.0
@@ -43,5 +44,6 @@ tomli==2.0.1
 urllib3==1.26.12
 virtualenv==20.16.3
 Werkzeug==2.2.2
+wkhtmltopdf==0.2
 yfinance==0.1.74
 zipp==3.8.1
