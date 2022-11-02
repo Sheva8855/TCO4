@@ -375,17 +375,17 @@ def tco():
 
 
     labels = ['CAPEX', 'Maintenance', 'Energy']
-    # if capexy>0 and main>0 and energie>0:
-    sizes = [int(capexy),int(main), int(energie)]
+    if capexy>0 and main>0 and energie>0:
+        sizes = [int(capexy),int(main), int(energie)]
 
-    fig1, ax1 = plt.subplots()
+        fig1, ax1 = plt.subplots()
 
-    ax1.pie(sizes, labels=labels,shadow=False, startangle=90)
-    # ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
-    # plt.savefig('static/tco.png',bbox_inches=None)
+        ax1.pie(sizes, labels=labels,shadow=False, startangle=90)
+        ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+        plt.savefig('static/tco.png',bbox_inches=None)
 
 
-    return render_template('tco.html',fig1=fig1,capexy=capexy,main=main,energie=energie, currency=currency,sizes=sizes, labels=labels,ax1=ax1)
+    return render_template('tco.html',capexy=capexy,main=main,energie=energie, currency=currency, labels=labels)
 
 @app.route('/capex', methods=['POST','GET'])
 def capex():
@@ -442,8 +442,9 @@ def capex():
     except:
         return render_template('capex.html', user_components=user_components,unit_name=unit_name,total_capex_direct=total_capex_direct)
 
-# @app.route('/create_pdf', methods=['POST','GET'])
-# def create_pdf():
+@app.route('/create_pdf', methods=['POST','GET'])
+def create_pdf():
+    return 'this function will be added soon'
 #     name = "Giovanni Smith"
 #     html = render_template(
 #         "form_page.html",

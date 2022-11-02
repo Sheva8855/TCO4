@@ -36,14 +36,22 @@ TCO
   <div class="tab-pane fade show active" id="tco" role="tabpanel" aria-labelledby="tco"></div>
 </div>
 
+<table>
+  <tr>
+    <td>
 <p class="lead"></p>
 <p>capex: {{capexy}} {{currency}}</p>
 <p>energy: {{energie}} {{currency}}</p>
 <p>maintenance: {{main}} {{currency}}</p>
 <p>labor cost: {{currency}}</p>
-{{sizes}}
-{{labels}}
-{{ax1}}
-{{fig1}}
+{{labels}}</td>
+<td>
+{% if capexy>0 and main>0 and energie>0 %}
 <img src="{{url_for('static', filename='tco.png')}}" align="middle" width="1000" height="500"/>
+{%else%}
+    <div style="margin-left:300px; margin-top:200px;">No figure to display</div>
+{%endif%}
+</td>
+</tr>
+</table>
 {%endblock%}

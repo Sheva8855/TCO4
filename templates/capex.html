@@ -11,12 +11,11 @@ CAPEX
 
 .image {
   grid-area: image;
-  background:pink;
 }
 
 .tab {
   grid-area: tab;
-  align-self: center;
+  align-self: top;
   background:lightblue;
 }
 .container {
@@ -105,7 +104,13 @@ ul {list-style-type: decimal;}
     <b>Total cost: {{total_capex_direct}} {{currency}}</b><br>
   </div>
 <div class="image">
-<img src="{{url_for('static', filename='capex2.png')}}" align="middle" alt="Capex pic" width="1000" height="500"/>
+    {% if total_capex_direct==0 %}
+    <div style="margin-left:300px; margin-top:300px;">No figure to display</div>
+    {%else%}
+    <img src="{{url_for('static', filename='capex2.png')}}" align="middle" alt="Capex pic" width="1000" height="500"/>
+
+    {%endif%}
+    <img src="{{url_for('static', filename='capex2.png')}}" align="middle" alt="Capex pic" width="1000" height="500"/>
 
   </div>
 </section>

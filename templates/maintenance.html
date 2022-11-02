@@ -77,8 +77,14 @@ Maintenance Data
     </td>
     </tr></table>
   </div>
+
   <div class="image">
+    {% if mains[-1]==0 %}
+    <div style="margin-left:300px; margin-top:300px;">No figure to display</div>
+    {%else%}
 <img src="{{url_for('static', filename='maintenance.png')}}" align="middle" width="1000" height="500"/>
+
+    {%endif%}
     </div>
 </section>
 {%endblock%}
