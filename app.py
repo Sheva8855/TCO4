@@ -11,12 +11,17 @@ app.secret_key='BAD_SECRET_KEY'
 # app.config['SQLALCHEMY_DATABASE_URI']='sqlite:///tco.db'
 # db=SQLAlchemy(app)
 
-component_list=['Pump','Compressor','Baseplate','Driver','Coupling','Supply_System','Fluid_Coupling','VFD','Lube_Oil_System','Transformer','Harmonic_filter','Instruments','Fan','Mixer','Diesel','Turbine','Cabinet','Others']
+component_list=['Pump','Compressor','Baseplate','Driver','Coupling','Supply System','Fluid Coupling','VFD','Lube Oil System','Transformer','Harmonic Filter','Instruments','Fan','Mixer','Diesel','Turbine','Cabinet','Others']
+main_eq=['Pump','Compressor','Fan','Mixer']
+dr_eq=['Electrical motor','Diesel','Turbine']
+el_eq=['VFD','Transformer','Harmonic Filter','Cabinet','Instruments','Junction box']
+ot_eq=['Baseplate','Supply System','Coupling','Fluid Coupling','Lube Oil System','Others']
+
 user_components = []
 user_maintenances = []
 user_points= []
 
-project_name='project 1'
+project_name='Project 1'
 unit_name='P-001'
 energy_price=0.04
 annual_increase=1.5
@@ -62,9 +67,9 @@ def form_page():
     for i in range(len(user_points)):
         sum+=user_points[i][5]
     if sum<12:
-        message='Please note that sum of scenarios for all points should be 12(months)'
+        message='Please note that sum of scenarios for all points should be 12 (months)'
     elif sum>12:
-        message='Sum of scenarios is more than 12(months)!'
+        message='Sum of scenarios is more than 12 (months)!'
 
     k=0
     eff_driver = 0
@@ -74,7 +79,7 @@ def form_page():
     scenario = 0
     a=0
 
-    return render_template('form_page.html',user_points=user_points,user_maintenances=user_maintenances,user_components=user_components,sum=sum,message=message,component_list=component_list,a=a,m=m,eff_driver=eff_driver,eff_other=eff_other,power_pump=power_pump,power_aux=power_aux,scenario=scenario,k=k, i=i,j=j,component=component,component_price=component_price, comments=comments, main_type=main_type, period=period,main_price=main_price, main_comments=main_comments, unit_name=unit_name, energy_price=energy_price, annual_increase=annual_increase, number_years=number_years,project_name=project_name, currency=currency )
+    return render_template('form_page.html',ot_eq=ot_eq,main_eq=main_eq,dr_eq=dr_eq,el_eq=el_eq,user_points=user_points,user_maintenances=user_maintenances,user_components=user_components,sum=sum,message=message,component_list=component_list,a=a,m=m,eff_driver=eff_driver,eff_other=eff_other,power_pump=power_pump,power_aux=power_aux,scenario=scenario,k=k, i=i,j=j,component=component,component_price=component_price, comments=comments, main_type=main_type, period=period,main_price=main_price, main_comments=main_comments, unit_name=unit_name, energy_price=energy_price, annual_increase=annual_increase, number_years=number_years,project_name=project_name, currency=currency )
 
 #Обработка формы добавление компонента
 @app.route('/form_page/add_component', methods=['POST','GET'])
@@ -103,16 +108,13 @@ def form_page_add_component():
 #Обработка формы добавление обслуживания
 @app.route('/form_page/add_maintenance', methods=['POST','GET'])
 def form_page_add_maintenance():
-    # maintenances = Maintenance.query.all()
-    # main_type = 0
-    # period = 0
-    # main_price = 0
-    # main_comments = 0
     global n2
     if request.method=="POST":
         #maintenances = Maintenance.query.all()
         main_type = request.form["main_type"]
         period = request.form["period"]
+        if main_type=="Annual Maintenance-Spares" and period!=1:
+            period=1
         main_price = request.form["main_price"]
         main_comments = request.form["main_comments"]
         user_maintenances.append([main_type, period, main_price,main_comments, n2])
@@ -434,13 +436,14 @@ def capex():
     sizes = direct
     fig1, ax1 = plt.subplots()
     ax1.pie(sizes, labels=labels,shadow=False, startangle=90,autopct='%1.0f%%')
+    plt.title("Capex for "+unit_name)
     ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
     plt.savefig('static/capex2.png')
 
     try:
-        return render_template('capex.html',user_components=user_components,x=x,unit_name=unit_name,total_capex_direct=total_capex_direct, currency=currency)
+        return render_template('capex.html',user_components=user_components,x=x,unit_name=unit_name,total_capex_direct=total_capex_direct, currency=currency, project_name=project_name)
     except:
-        return render_template('capex.html', user_components=user_components,unit_name=unit_name,total_capex_direct=total_capex_direct)
+        return render_template('capex.html', user_components=user_components,unit_name=unit_name,total_capex_direct=total_capex_direct, currency=currency, project_name=project_name)
 
 @app.route('/create_pdf', methods=['POST','GET'])
 def create_pdf():
