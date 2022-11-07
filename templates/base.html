@@ -15,30 +15,37 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
     <link rel="stylesheet" href='https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css'>
     <title>{%block title%} Total Cost of Ownership Calculator for Rotating Equipment{%endblock%}</title>
+    <script type ="text/javascript" src="https://cdn.anychart.com/releases/8.0.1/js/anychart-core.min.js"></script>
+    <script type ="text/javascript" src="https://cdn.anychart.com/releases/8.0.1/js/anychart-pie.min.js"></script>
+    <script type ="text/javascript" src="{{url_for('static', filename='pie.js')}}"></script>
+
+    <script>
+        function changeclass(element) {
+    $(element).toggleClass('btn btn-warning btn-sm');
+}
+    </script>
 </head>
 <body style="background-color:white; margin-right: auto; margin-left: auto; width: 100%;">
 <div class="header">
 <table>
 <tr>
-    <td><img src="{{url_for('static', filename='Logo Colour.png')}}" align="middle" width="220" height="100"/></td>
-    <td width="1000px"><p class="text-center">
+    <td><img src="{{url_for('static', filename='Logo Colour.png')}}" align="middle" width="198" height="90"/></td>
+    <td style="width:1000px;">
+        <div class="h3" style="color:004A82; margin-bottom:2px;text-align:center;width:1000px;"><b>Total Cost of Ownership Calculator for Rotating Equipment</b></div>
 
-        <span class="h3" style="color:004A82; margin-bottom:2px;"><b>Total Cost of Ownership Calculator for Rotating Equipment</b></span></p>
-<p class="text-center">
-<span class="fs-6">Calculate CAPEX, Maintenance & Energy Costs for your pump, compressor and other rotating equipment
-</span>
-    </td>
+    <div class="h6" style="color:004A82; margin-bottom:2px;text-align:center;">Calculate CAPEX, Maintenance & Energy Costs for your pump, compressor and other rotating equipment
+    </div></td>
 </tr>
 </table>
 
 
-</p>
+
 </div>
-<p class="text-center">
 
 
 
-<p></p>
+
+
 
 {%block body%}{%endblock%}
 <p></p>contact admin: shevkoplyas.anton@gmail.com

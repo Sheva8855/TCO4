@@ -13,7 +13,7 @@ app.secret_key='BAD_SECRET_KEY'
 
 component_list=['Pump','Compressor','Baseplate','Driver','Coupling','Supply System','Fluid Coupling','VFD','Lube Oil System','Transformer','Harmonic Filter','Instruments','Fan','Mixer','Diesel','Turbine','Cabinet','Others']
 main_eq=['Pump','Compressor','Fan','Mixer']
-dr_eq=['Electrical motor','Diesel','Turbine']
+dr_eq=['Electric motor','Diesel','Turbine']
 el_eq=['VFD','Transformer','Harmonic Filter','Cabinet','Instruments','Junction box']
 ot_eq=['Baseplate','Supply System','Coupling','Fluid Coupling','Lube Oil System','Others']
 
@@ -436,9 +436,10 @@ def capex():
     sizes = direct
     fig1, ax1 = plt.subplots()
     ax1.pie(sizes, labels=labels,shadow=False, startangle=90,autopct='%1.0f%%')
-    plt.title("Capex for "+unit_name)
+    plt.title("CAPEX for "+unit_name)
     ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
     plt.savefig('static/capex2.png')
+    plt.show()
 
     try:
         return render_template('capex.html',user_components=user_components,x=x,unit_name=unit_name,total_capex_direct=total_capex_direct, currency=currency, project_name=project_name)
