@@ -1,0 +1,69 @@
+
+table {
+    counter-reset: tableCount;
+    line-height: 20px;
+}
+tr {
+height: 14px;
+}
+.counterCell:before {
+    content: counter(tableCount);
+    counter-increment: tableCount;
+}
+<!--ul {list-style-type: decimal;}-->
+
+.input1 {
+  grid-area: input1;
+  padding-left: 10px;
+  background:#e0e0eb;
+}
+.input2 {
+  grid-area: input2;
+  padding-left: 10px;
+  background:#e0e0eb;
+}
+.input3 {
+  grid-area: input3;
+  padding-left: 10px;
+  background:#e0e0eb;
+}
+.input4 {
+  grid-area: input4;
+  padding-left: 10px;
+  padding-bottom: 10px;
+  background:#e0e0eb;
+}
+.tab1 {
+  grid-area: tab1;
+  align-self: start;
+}
+.tab2 {
+  grid-area: tab2;
+  align-self: start;
+}
+.tab3 {
+  grid-area: tab3;
+  align-self: start;
+}
+
+.container {
+  display: grid;
+  width: auto;
+  margin-left: 10px;
+  gap: 10px 10px;
+  grid-template-columns: 400px 900px;
+  grid-template-rows: auto;
+  grid-template-areas:
+  "input4 input4"
+    "input1 tab1"
+    "input2 tab2"
+    "input3 tab3";
+
+}
+label {
+  width:180px;
+  display: inline-block;
+}
+* {
+  font-family: open-sans;
+}

@@ -1,5 +1,6 @@
 from flask import Flask, render_template, url_for, request, redirect, flash,session, make_response
 from flask_sqlalchemy import SQLAlchemy
+from flask_session import Session
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
@@ -11,13 +12,18 @@ app.secret_key='BAD_SECRET_KEY'
 # app.config['SQLALCHEMY_DATABASE_URI']='sqlite:///tco.db'
 # db=SQLAlchemy(app)
 
+# Check Configuration section for more details
+SESSION_TYPE = 'filesystem'
+app.config.from_object(__name__)
+Session(app)
+
 component_list=['Pump','Compressor','Baseplate','Driver','Coupling','Supply System','Fluid Coupling','VFD','Lube Oil System','Transformer','Harmonic Filter','Instruments','Fan','Mixer','Diesel','Turbine','Cabinet','Others']
 main_eq=['Pump','Compressor','Fan','Mixer']
 dr_eq=['Electric motor','Diesel','Turbine']
 el_eq=['VFD','Transformer','Harmonic Filter','Cabinet','Instruments','Junction box']
 ot_eq=['Baseplate','Supply System','Coupling','Fluid Coupling','Lube Oil System','Others']
 
-user_components = []
+# user_components = []
 user_maintenances = []
 user_points= []
 
@@ -34,14 +40,22 @@ capexy=0
 main=0
 energie=0
 
+@app.route('/reset')
+def reset():
+    session["user_components"]=[]
+
+    return "inputs were reset"
+
 
 #Главная страница формы
 @app.route('/', methods=['POST','GET'])
 @app.route('/form_page', methods=['POST','GET'])
 def form_page():
-    global user_maintenances,user_components,user_points
-    for i in range(len(user_components)):
-        user_components[i][3] = i
+    if not "user_components" in session:
+        session["user_components"] = []
+    global user_maintenances,user_points
+    for i in range(len(session["user_components"])):
+        session["user_components"][i][3] = i
     for y in range(len(user_maintenances)):
         user_maintenances[y][4] = y
     for z in range(len(user_points)):
@@ -79,7 +93,7 @@ def form_page():
     scenario = 0
     a=0
 
-    return render_template('form_page.html',ot_eq=ot_eq,main_eq=main_eq,dr_eq=dr_eq,el_eq=el_eq,user_points=user_points,user_maintenances=user_maintenances,user_components=user_components,sum=sum,message=message,component_list=component_list,a=a,m=m,eff_driver=eff_driver,eff_other=eff_other,power_pump=power_pump,power_aux=power_aux,scenario=scenario,k=k, i=i,j=j,component=component,component_price=component_price, comments=comments, main_type=main_type, period=period,main_price=main_price, main_comments=main_comments, unit_name=unit_name, energy_price=energy_price, annual_increase=annual_increase, number_years=number_years,project_name=project_name, currency=currency )
+    return render_template('form_page.html',ot_eq=ot_eq,main_eq=main_eq,dr_eq=dr_eq,el_eq=el_eq,user_points=user_points,user_maintenances=user_maintenances,user_components=session["user_components"],sum=sum,message=message,component_list=component_list,a=a,m=m,eff_driver=eff_driver,eff_other=eff_other,power_pump=power_pump,power_aux=power_aux,scenario=scenario,k=k, i=i,j=j,component=component,component_price=component_price, comments=comments, main_type=main_type, period=period,main_price=main_price, main_comments=main_comments, unit_name=unit_name, energy_price=energy_price, annual_increase=annual_increase, number_years=number_years,project_name=project_name, currency=currency )
 
 #Обработка формы добавление компонента
 @app.route('/form_page/add_component', methods=['POST','GET'])
@@ -94,16 +108,16 @@ def form_page_add_component():
         component_price = request.form["component_price"]
         comments = request.form["comments"]
         component = request.form["component"]
-        user_components.append([component,component_price,comments,n1])
+        session["user_components"].append([component,component_price,comments,n1])
         n1+=1
-        for i in range(len(user_components)):
-            user_components[i][3] = i
+        for i in range(len(session["user_components"])):
+            session["user_components"][i][3] = i
         try:
             return redirect(url_for('form_page'))
         except:
             return "При добалении данных произошла ошибка"
     else:
-        return render_template('form_page.html', user_components=user_components,component=component,component_price=component_price,comments=comments)
+        return render_template('form_page.html', user_components=session["user_components"],component=component,component_price=component_price,comments=comments)
 
 #Обработка формы добавление обслуживания
 @app.route('/form_page/add_maintenance', methods=['POST','GET'])
@@ -115,7 +129,7 @@ def form_page_add_maintenance():
         period = request.form["period"]
         if main_type=="Annual Maintenance-Spares" and period!=1:
             period=1
-        main_price = request.form["main_price"]
+        main_price = request.form["main_price"]git commit -am "make it better"
         main_comments = request.form["main_comments"]
         user_maintenances.append([main_type, period, main_price,main_comments, n2])
         n2 += 1
@@ -248,7 +262,7 @@ def delete_component(id):
     #     db.session.commit()
     #     return redirect('/form_page')
     try:
-        user_components.pop(id)
+        session["user_components"].pop(id)
         return redirect('/form_page')
     except:
         return "При удалении компонента произошла ошибка"
@@ -399,9 +413,9 @@ def capex():
     #     direct.append(unit_components[i].component_price)
     #direct.append(total_capex_direct)
 
-    for i in range(len(user_components)):
-        total_capex_direct+=int(user_components[i][1])
-        direct.append(int(user_components[i][1]))
+    for i in range(len(session["user_components"])):
+        total_capex_direct+=int(session["user_components"][i][1])
+        direct.append(int(session["user_components"][i][1]))
     # direct.append(total_capex_direct)
     capexy=total_capex_direct
     labels=[]
@@ -409,8 +423,8 @@ def capex():
     #     labels.append(unit_components[j].component)
     # labels.append('total_capex_direct')
 
-    for j in range(len(user_components)):
-        labels.append(user_components[j][0])
+    for j in range(len(session["user_components"])):
+        labels.append(session["user_components"][j][0])
     labels.append('total_capex')
 
 
@@ -442,9 +456,9 @@ def capex():
     plt.show()
 
     try:
-        return render_template('capex.html',user_components=user_components,x=x,unit_name=unit_name,total_capex_direct=total_capex_direct, currency=currency, project_name=project_name)
+        return render_template('capex.html',user_components=session["user_components"],x=x,unit_name=unit_name,total_capex_direct=total_capex_direct, currency=currency, project_name=project_name)
     except:
-        return render_template('capex.html', user_components=user_components,unit_name=unit_name,total_capex_direct=total_capex_direct, currency=currency, project_name=project_name)
+        return render_template('capex.html', user_components=session["user_components"],unit_name=unit_name,total_capex_direct=total_capex_direct, currency=currency, project_name=project_name)
 
 @app.route('/create_pdf', methods=['POST','GET'])
 def create_pdf():
