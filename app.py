@@ -23,7 +23,6 @@ dr_eq=['Electric motor','Diesel','Turbine']
 el_eq=['VFD','Transformer','Harmonic Filter','Cabinet','Instruments','Junction box']
 ot_eq=['Baseplate','Supply System','Coupling','Fluid Coupling','Lube Oil System','Others']
 
-# user_components = []
 user_maintenances = []
 user_points= []
 
@@ -129,7 +128,7 @@ def form_page_add_maintenance():
         period = request.form["period"]
         if main_type=="Annual Maintenance-Spares" and period!=1:
             period=1
-        main_price = request.form["main_price"]git commit -am "make it better"
+        main_price = request.form["main_price"]
         main_comments = request.form["main_comments"]
         user_maintenances.append([main_type, period, main_price,main_comments, n2])
         n2 += 1
