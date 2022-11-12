@@ -33,7 +33,7 @@ annual_increase=1.5
 n1=1
 n2=1
 n3=0
-capexy=0
+# capexy=0
 main=0
 energie=0
 
@@ -48,6 +48,8 @@ def reset():
 @app.route('/', methods=['POST','GET'])
 @app.route('/form_page', methods=['POST','GET'])
 def form_page():
+    if not "capexy" in session:
+        session["capexy"] = 0
     if not "user_components" in session:
         session["user_components"] = []
     if not "user_maintenances" in session:
@@ -101,7 +103,67 @@ def form_page():
     scenario = 0
     a=0
 
-    return render_template('form_page.html',ot_eq=ot_eq,main_eq=main_eq,dr_eq=dr_eq,el_eq=el_eq,user_points=session["user_points"],user_maintenances=session["user_maintenances"],user_components=session["user_components"],sum=sum,message=message,component_list=component_list,a=a,m=m,eff_driver=eff_driver,eff_other=eff_other,power_pump=power_pump,power_aux=power_aux,scenario=scenario,k=k, i=i,j=j,component=component,component_price=component_price, comments=comments, main_type=main_type, period=period,main_price=main_price, main_comments=main_comments, unit_name=session["unit_name"], energy_price=energy_price, annual_increase=annual_increase, number_years=session["number_years"],project_name=session["project_name"], currency=session["currency"] )
+    #Capex module
+    total_capex_direct=0
+    direct=[]
+
+    for i in range(len(session["user_components"])):
+        total_capex_direct+=int(session["user_components"][i][1])
+        direct.append(int(session["user_components"][i][1]))
+    session["capexy"]=total_capex_direct
+    labels=[]
+
+    for j in range(len(session["user_components"])):
+        labels.append(session["user_components"][j][0])
+    labels.append('total_capex')
+
+    labels.pop()
+    sizes = direct
+    fig1, ax1 = plt.subplots()
+    ax1.pie(sizes, labels=labels,shadow=False, startangle=90,autopct='%1.0f%%')
+    plt.title("CAPEX for "+session["unit_name"])
+    ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+    fig1.set_size_inches(6.8, 4.8)
+    plt.show()
+    plt.savefig('static/capex2.png')
+    #end of CAPEX module
+
+#Maintetnce module
+    global main
+    prices = []
+    per = []
+    for maintenance in session["user_maintenances"]:
+        prices.append(int(maintenance[2]))
+        per.append(int(maintenance[1]))
+
+    n = int(session["number_years"])
+    i = 1
+    x = 0
+    mains = []
+    while i <= n:
+        for j in range(len(per)):
+            if i % per[j] == 0:
+                x += prices[j] * (1 + (float(annual_increase) / 100)) ** (i - 1)
+        mains.append(round(x))
+        i += 1
+
+    main = mains[-1]
+    a = np.array(mains)
+    #     b = np.array(main_vfd)
+    plt.switch_backend('agg')
+    plt.plot(a, label='Costs')
+    #     plt.plot(b, label='VFD')
+    plt.title('Mainenance Cost for ' + session["unit_name"])
+    plt.xlabel('Year')
+    plt.ylabel('Maintenance Cost, ' + session["currency"])
+    plt.legend()
+    plt.grid()
+    plt.xticks(np.arange(1, n + 1, 1.0))
+    plt.rcParams["figure.figsize"] = (16, 8)
+    plt.savefig('static/maintenance.png')
+    years = range(1, n + 1)
+
+    return render_template('form_page.html',mains=mains, years=years,total_capex_direct=total_capex_direct, non_eq=non_eq,ot_eq=ot_eq,main_eq=main_eq,dr_eq=dr_eq,el_eq=el_eq,user_points=session["user_points"],user_maintenances=session["user_maintenances"],user_components=session["user_components"],sum=sum,message=message,component_list=component_list,a=a,m=m,eff_driver=eff_driver,eff_other=eff_other,power_pump=power_pump,power_aux=power_aux,scenario=scenario,k=k, i=i,j=j,component=component,component_price=component_price, comments=comments, main_type=main_type, period=period,main_price=main_price, main_comments=main_comments, unit_name=session["unit_name"], energy_price=energy_price, annual_increase=annual_increase, number_years=session["number_years"],project_name=session["project_name"], currency=session["currency"] )
 
 #Обработка формы добавление компонента
 @app.route('/form_page/add_component', methods=['POST','GET'])
@@ -361,7 +423,7 @@ def energy():
 
 @app.route('/tco', methods=['POST', 'GET'])
 def tco():
-    global capexy, main, energie
+    global main, energie
     total_capex_direct = 0
     direct = []
 
@@ -389,8 +451,8 @@ def tco():
 
 
     labels = ['CAPEX', 'Maintenance', 'Energy']
-    if capexy>0 and main>0 and energie>0:
-        sizes = [int(capexy),int(main), int(energie)]
+    if session["capexy"]>0 and main>0 and energie>0:
+        sizes = [int(session["capexy"]),int(main), int(energie)]
 
         fig1, ax1 = plt.subplots()
 
@@ -399,11 +461,10 @@ def tco():
         plt.savefig('static/tco.png',bbox_inches=None)
 
 
-    return render_template('tco.html',capexy=capexy,main=main,energie=energie, currency=session["currency"], labels=labels,number_years=session["number_years"])
+    return render_template('tco.html',capexy=session["capexy"],main=main,energie=energie, currency=session["currency"], labels=labels,number_years=session["number_years"])
 
 @app.route('/capex', methods=['POST','GET'])
 def capex():
-    global capexy
     total_capex_direct=0
     direct=[]
     # for i in range(len(unit_components)):
@@ -414,7 +475,7 @@ def capex():
     for i in range(len(session["user_components"])):
         total_capex_direct+=int(session["user_components"][i][1])
         direct.append(int(session["user_components"][i][1]))
-    capexy=total_capex_direct
+    session["capexy"]=total_capex_direct
     labels=[]
     # for j in range(len(unit_components)):
     #     labels.append(unit_components[j].component)

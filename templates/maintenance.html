@@ -9,23 +9,23 @@ Maintenance Data
 
 <style>
 
-.image {
+.image_main {
   grid-area: image;
 }
 
-.tab {
+.tab_main {
   grid-area: tab;
   align-self: start;
   background:lightblue;
 }
-.container {
+.container_main {
   display: grid;
   margin-left: 10px;
   gap: 10px 10px;
   grid-template-columns: 300px 900px;
   grid-template-rows: auto;
   grid-template-areas:
-    "tab image";
+    "tab_main image_main";
     }
 
 
@@ -61,8 +61,8 @@ Maintenance Data
   <div class="tab-pane fade" id="tco" role="tabpanel" aria-labelledby="tco"></div>
 </div>
 
-<section class="container">
-  <div class="tab">
+<section class="container_main">
+  <div class="tab_main">
 
 <table class="table table-striped table-sm" border="1px solid black" align="center">
   <th width="100" class="text-center">Year</th><th width="100" class="text-center">Maintenance Costs, {{currency}}</th>
@@ -78,7 +78,7 @@ Maintenance Data
     </tr></table>
   </div>
 
-  <div class="image">
+  <div class="image_main">
     {% if mains[-1]==0 %}
     <div style="margin-left:300px; margin-top:300px;">No figure to display</div>
     {%else%}

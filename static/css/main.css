@@ -68,3 +68,54 @@ label {
 * {
   font-family: open-sans;
 }
+
+
+from Capex:
+
+.image_capex {
+  grid-area: image_capex;
+}
+
+.tab_capex {
+  grid-area: tab_capex;
+  align-self: top;
+  background:lightblue;
+}
+.container_capex {
+  display: grid;
+  margin-left: 10px;
+  gap: 10px 10px;
+  grid-template-columns: 400px 500px;
+  grid-template-rows: auto;
+  grid-template-areas:
+    "tab_capex image_capex";
+    }
+
+table {
+    counter-reset: tableCount;
+}
+.counterCell:before {
+    content: counter(tableCount);
+    counter-increment: tableCount;
+}
+ul {list-style-type: decimal;}
+
+from maintenance:
+
+.image_main {
+  grid-area: image_main;
+}
+
+.tab_main {
+  grid-area: tab_main;
+  align-self: start;
+  background:lightblue;
+}
+.container_main {
+  display: grid;
+  margin-left: 10px;
+  gap: 10px;
+  grid-template-columns: 300px 900px;
+  grid-template-rows: auto;
+  grid-template-areas:
+    "tab_main image_main";
