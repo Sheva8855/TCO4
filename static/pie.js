@@ -36,28 +36,7 @@
 //  chart.draw();
 //});
 
-    var plane;
-    var popular;
 
-    var Array1=[];
-    var Array2=[];
-    var components=[];
-function addcomponents(){
-  //Assign values
-  plane=document.getElementById("plane");
-  popular=document.getElementById("popular");
-  Array1.push(plane);
-  Array2.push(popular);
-  components=[Array1,Array2];
-  console.log(Array1);
-  console.log(Array2);
-  console.log(components);
-
-  //output the results
-//  document.getElementById("container3").innerHTML = 7+9;
-//  document.getElementById('container3').innerHTML =plane;
-  document.getElementById('container3').innerHTML = 7+'<br>Some new content!';
-  return true;
 }
 
 function autofill(){

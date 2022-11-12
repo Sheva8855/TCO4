@@ -25,12 +25,13 @@ height: 14px;
 .input3 {
   grid-area: input3;
   padding-left: 10px;
+  margin-bottom: 5px;
   background:#e0e0eb;
 }
 .input4 {
   grid-area: input4;
   padding-left: 10px;
-  padding-bottom: 10px;
+  padding-bottom: 5px;
   background:#e0e0eb;
 }
 .tab1 {
@@ -49,8 +50,8 @@ height: 14px;
 .container {
   display: grid;
   width: auto;
-  margin-left: 10px;
-  gap: 10px 10px;
+  margin-left: 10 !important;
+  gap: 5px 10px;
   grid-template-columns: 400px 900px;
   grid-template-rows: auto;
   grid-template-areas:
