@@ -107,9 +107,9 @@ ul {list-style-type: decimal;}
     {% if total_capex_direct==0 %}
     <div style="margin-left:300px; margin-top:300px;">No figure to display</div>
     {%else%}
-    Project: {{project_name}}<br>
-    <img src="{{url_for('static', filename='capex2.png')}}" align="middle" alt="Capex pic" width="640" height="480"/>
-
+    Project: {{project_name}},<br> Item: {{unit_name}}<br>
+    <img src="{{url_for('static', filename='capex2.png')}}" align="middle" alt="Capex pic" />
+<!--width="640" height="480"-->
     {%endif%}
 
   </div>
