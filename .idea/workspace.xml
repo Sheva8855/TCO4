@@ -266,7 +266,7 @@
       <window_info anchor="bottom" id="Python Console" order="7" weight="0.3294893" />
       <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4642857" weight="0.11316649" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="8" sideWeight="0.4985119" visible="true" weight="0.28073993" />
+      <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.4985119" weight="0.28073993" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
