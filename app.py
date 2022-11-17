@@ -12,7 +12,6 @@ app.secret_key='BAD_SECRET_KEY'
 # app.config['SQLALCHEMY_DATABASE_URI']='sqlite:///tco.db'
 # db=SQLAlchemy(app)
 
-# Check Configuration section for more details
 SESSION_TYPE = 'filesystem'
 app.config.from_object(__name__)
 Session(app)
@@ -21,21 +20,19 @@ component_list=['Pump','Compressor','Baseplate','Driver','Coupling','Supply Syst
 main_eq=['Pump','Compressor','Fan','Mixer']
 dr_eq=['Electric motor','Diesel','Turbine']
 el_eq=['VFD','Transformer','Harmonic Filter','Cabinet','Instruments','Junction box']
-ot_eq=['Baseplate','Supply System','Coupling','Fluid Coupling','Lube Oil System','Others']
+ot_eq=['Baseplate','Gearbox','Supply System','Coupling','Fluid Coupling','Lube Oil System','Others']
 non_eq=['Testing','QA requirements','Freight charges']
-
+configurations=['direct drive pump','VFD drive pump','Fluidcoupling type']
 # project_name='Project 1'
 # unit_name='P-001'
 energy_price=0.04
 annual_increase=1.5
-# number_years = 30
 
 n1=1
 n2=1
 n3=0
 # capexy=0
-main=0
-energie=0
+
 
 @app.route('/reset')
 def reset():
@@ -48,6 +45,8 @@ def reset():
 @app.route('/', methods=['POST','GET'])
 @app.route('/form_page', methods=['POST','GET'])
 def form_page():
+    if not "energie" in session:
+        session["energie"] = 0
     if not "capexy" in session:
         session["capexy"] = 0
     if not "user_components" in session:
@@ -64,6 +63,8 @@ def form_page():
         session["unit_name"] = 'P-001'
     if not "number_years" in session:
         session["number_years"] = 30
+    if not "main" in session:
+        session["main"] = 0
     for i in range(len(session["user_components"])):
         session["user_components"][i][3] = i
     for y in range(len(session["user_maintenances"])):
@@ -106,30 +107,29 @@ def form_page():
     #Capex module
     total_capex_direct=0
     direct=[]
+    if session["user_components"] != []:
+        for i in range(len(session["user_components"])):
+            total_capex_direct+=int(session["user_components"][i][1])
+            direct.append(int(session["user_components"][i][1]))
+        session["capexy"]=total_capex_direct
+        labels=[]
 
-    for i in range(len(session["user_components"])):
-        total_capex_direct+=int(session["user_components"][i][1])
-        direct.append(int(session["user_components"][i][1]))
-    session["capexy"]=total_capex_direct
-    labels=[]
+        for j in range(len(session["user_components"])):
+            labels.append(session["user_components"][j][0])
+        labels.append('total_capex')
 
-    for j in range(len(session["user_components"])):
-        labels.append(session["user_components"][j][0])
-    labels.append('total_capex')
-
-    labels.pop()
-    sizes = direct
-    fig1, ax1 = plt.subplots()
-    ax1.pie(sizes, labels=labels,shadow=False, startangle=90,autopct='%1.0f%%')
-    plt.title("CAPEX for "+session["unit_name"])
-    ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
-    fig1.set_size_inches(6.8, 4.8)
-    plt.show()
-    plt.savefig('static/capex2.png')
+        labels.pop()
+        sizes = direct
+        fig1, ax1 = plt.subplots()
+        ax1.pie(sizes, labels=labels,shadow=False, startangle=90,autopct='%1.0f%%')
+        plt.title("CAPEX for "+session["unit_name"])
+        ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+        fig1.set_size_inches(6.8, 4.8)
+        plt.show()
+        plt.savefig('static/capex2.png')
     #end of CAPEX module
 
 #Maintetnce module
-    global main
     prices = []
     per = []
     for maintenance in session["user_maintenances"]:
@@ -137,17 +137,17 @@ def form_page():
         per.append(int(maintenance[1]))
 
     n = int(session["number_years"])
-    i = 1
+    i = 0
     x = 0
     mains = []
     while i <= n:
         for j in range(len(per)):
-            if i % per[j] == 0:
-                x += prices[j] * (1 + (float(annual_increase) / 100)) ** (i - 1)
+            if i % per[j] == 0 and i>0:
+                x += prices[j] * (1 + (float(annual_increase) / 100)) ** i
         mains.append(round(x))
         i += 1
 
-    main = mains[-1]
+    session["main"] = mains[-1]
     a = np.array(mains)
     #     b = np.array(main_vfd)
     plt.switch_backend('agg')
@@ -158,26 +158,61 @@ def form_page():
     plt.ylabel('Maintenance Cost, ' + session["currency"])
     plt.legend()
     plt.grid()
-    plt.xticks(np.arange(1, n + 1, 1.0))
+    plt.xticks(np.arange(0, n+1, 1.0))
     plt.rcParams["figure.figsize"] = (16, 8)
     plt.savefig('static/maintenance.png')
-    years = range(1, n + 1)
 
-    return render_template('form_page.html',mains=mains, years=years,total_capex_direct=total_capex_direct, non_eq=non_eq,ot_eq=ot_eq,main_eq=main_eq,dr_eq=dr_eq,el_eq=el_eq,user_points=session["user_points"],user_maintenances=session["user_maintenances"],user_components=session["user_components"],sum=sum,message=message,component_list=component_list,a=a,m=m,eff_driver=eff_driver,eff_other=eff_other,power_pump=power_pump,power_aux=power_aux,scenario=scenario,k=k, i=i,j=j,component=component,component_price=component_price, comments=comments, main_type=main_type, period=period,main_price=main_price, main_comments=main_comments, unit_name=session["unit_name"], energy_price=energy_price, annual_increase=annual_increase, number_years=session["number_years"],project_name=session["project_name"], currency=session["currency"] )
+
+# Energy Module
+    n = int(session["number_years"])
+    costs = [0]
+    for i in session["user_points"]:
+        dr1 = round((i[2] + i[3]) / (i[0] * i[1]) * 10000, 2)
+        dr2 = round(dr1 - (i[2] + i[3]), 2)
+        dr3 = round(((i[2] + i[3]) / (i[0] * i[1]) * 10000 - (i[2] + i[3])) * (i[4] * 725), 2)
+        i[6] = dr1
+        i[7] = dr2
+        i[8] = dr3
+    total_loss = 0
+    for i in session["user_points"]:
+        total_loss += i[8]
+    dr4 = round(total_loss * float(energy_price), 2)
+    dr5 = 0
+    for i in range(0, n ):
+        dr5 += dr4 * (1 + (float(annual_increase) / 100)) ** i
+        costs.append(round(dr5, 2))
+    session["energie"] = costs[-1]
+
+    #Energy chart
+    a = np.array(costs)
+    # #     b = np.array(main_vfd)
+    plt.switch_backend('agg')
+    plt.plot(a, label='Costs')
+    #     plt.plot(b, label='VFD')
+    plt.title('Energy Cost for ' + session["unit_name"])
+    plt.xlabel('Year')
+    plt.ylabel('Energy Cost, ' + session["currency"])
+    plt.legend()
+    plt.grid()
+    plt.xticks(np.arange(0, n + 1, 1.0))
+    plt.rcParams["figure.figsize"] = (16, 8)
+    plt.savefig('static/energy.png')
+    years = range(0, n+1)
+
+    return render_template('form_page.html',energie=session["energie"],costs=costs,mains=mains, years=years,total_capex_direct=total_capex_direct, non_eq=non_eq,ot_eq=ot_eq,main_eq=main_eq,dr_eq=dr_eq,el_eq=el_eq,user_points=session["user_points"],user_maintenances=session["user_maintenances"],user_components=session["user_components"],sum=sum,message=message,component_list=component_list,a=a,m=m,eff_driver=eff_driver,eff_other=eff_other,power_pump=power_pump,power_aux=power_aux,scenario=scenario,k=k, i=i,j=j,component=component,component_price=component_price, comments=comments, main_type=main_type, period=period,main_price=main_price, main_comments=main_comments, unit_name=session["unit_name"], energy_price=energy_price, annual_increase=annual_increase, number_years=session["number_years"],project_name=session["project_name"], currency=session["currency"] )
 
 #Обработка формы добавление компонента
 @app.route('/form_page/add_component', methods=['POST','GET'])
 def form_page_add_component():
     global n1
-    # unit_components = Component.query.all()
-    # component=0
-    # component_price=0
-    # comments=0
+
     if request.method=="POST":
         #unit_components = Component.query.all()
         component_price = request.form["component_price"]
         comments = request.form["comments"]
         component = request.form["component"]
+        if component=='' or component_price=='':
+            return "Select component and enter its price"
         session["user_components"].append([component,component_price,comments,n1])
         n1+=1
         for i in range(len(session["user_components"])):
@@ -237,8 +272,6 @@ def form_page_add_general():
         return redirect(url_for('form_page'))
         # generals = General.query.all()
         # unit_name = request.form["unit_name"]
-        # if unit_name=='':
-        #     unit_name=generals[-1].unit_name
         # energy_price = request.form["energy_price"]
         # if energy_price=='':
         #     energy_price=generals[-1].energy_price
@@ -292,10 +325,7 @@ def form_page_add_point():
 @app.route('/form_page/<int:id>/del_man')
 def delete_maintenance(id):
     #     maintenance = Maintenance.query.get_or_404(id)
-#     try:
-#         db.session.delete(maintenance)
-#         db.session.commit()
-#         return redirect('/form_page')
+
     try:
         session["user_maintenances"].pop(id)
         return redirect('/form_page')
@@ -320,7 +350,6 @@ def delete_component(id):
     # try:
     #     db.session.delete(unit_component)
     #     db.session.commit()
-    #     return redirect('/form_page')
     try:
         session["user_components"].pop(id)
         return redirect('/form_page')
@@ -329,7 +358,6 @@ def delete_component(id):
 
 @app.route('/maintenance', methods=['POST','GET'])
 def maintenance():
-     global main
      prices=[]
      per=[]
      for maintenance in session["user_maintenances"]:
@@ -354,9 +382,9 @@ def maintenance():
          mains.append(round(x))
          i+=1
 
-     main=mains[-1]
+     session["main"]=mains[-1]
      a = np.array(mains)
-#     b = np.array(main_vfd)
+     # #     b = np.array(main_vfd)
      plt.switch_backend('agg')
      plt.plot(a, label='Costs')
 #     plt.plot(b, label='VFD')
@@ -369,8 +397,7 @@ def maintenance():
      plt.rcParams["figure.figsize"] = (16, 8)
      plt.savefig('static/maintenance.png')
      years=range(1,n+1)
-     # plt.show()
-     # plt.close(fig)
+
      return render_template('maintenance.html',mains=mains,a=a, years=years, unit_name=session["unit_name"], currency=session["currency"])
 
 #Конец обработки форм
@@ -393,12 +420,10 @@ def efficiency():
     dr4=round(total_loss*float(energy_price),2)
     # unit_name = generals[-1].unit_name
     # energy_price = generals[-1].energy_price
-    # annual_increase = generals[-1].annual_increase
     return render_template('efficiency.html',currency=session["currency"],dr4=dr4,total_loss=total_loss,user_points=session["user_points"],unit_name=session["unit_name"],energy_price=energy_price,annual_increase=annual_increase)
 
 @app.route('/energy', methods=['POST','GET'])
 def energy():
-    global energie
     n = int(session["number_years"])
     years = range(1, n + 1)
     costs=[]
@@ -417,7 +442,24 @@ def energy():
     for i in range(1,n+1):
         dr5+=dr4*(1 + (float(annual_increase) / 100)) ** (i - 1)
         costs.append(round(dr5,2))
-    energie=costs[-1]
+    session["energie"]=costs[-1]
+
+    a = np.array(costs)
+    # #     b = np.array(main_vfd)
+    plt.switch_backend('agg')
+    plt.plot(a, label='Costs')
+    #     plt.plot(b, label='VFD')
+    plt.title('Energy Cost for ' + session["unit_name"])
+    plt.xlabel('Year')
+    plt.ylabel('Energy Cost, ' + session["currency"])
+    plt.legend()
+    plt.grid()
+    plt.xticks(np.arange(1, n + 1, 1.0))
+    plt.rcParams["figure.figsize"] = (16, 8)
+    plt.savefig('static/energy.png')
+    years = range(1, n + 1)
+
+
     return render_template('energy.html',costs=costs,years=years,energy_price=energy_price,annual_increase=annual_increase, currency=session["currency"])
 
 
@@ -431,7 +473,7 @@ def tco():
         total_capex_direct += int(session["user_components"][i][1])
         direct.append(int(session["user_components"][i][1]))
     direct.append(total_capex_direct)
-    capexy = total_capex_direct
+    session["capexy"] = total_capex_direct
 
     prices = []
     per = []
@@ -523,23 +565,10 @@ def capex():
 def create_pdf():
 
     return 'this function will be added soon'
-#     name = "Giovanni Smith"
-#     html = render_template(
-#         "form_page.html",
-#         name=name)
-#     pdf = pdfkit.from_string(html, False)
-#     response = make_response(pdf)
-#     response.headers["Content-Type"] = "application/pdf"
-#     response.headers["Content-Disposition"] = "inline; filename=TCO.pdf"
-#     return redirect('/form_page')
-#     try:
-#         pdf = pdfkit.from_string(html, False)
-#         response = make_response(pdf)
-#         response.headers["Content-Type"] = "application/pdf"
-#         response.headers["Content-Disposition"] = "inline; filename=TCO.pdf"
-#         return redirect('/form_page')
-#     except:
-#         return "Error while creating PDF"
+
+@app.route('/select_conf', methods=['POST','GET'])
+def select_conf():
+    return render_template('select_conf.html',configurations=configurations)
 
 if __name__=="__main__":
     app.run(debug=True)

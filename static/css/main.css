@@ -1,3 +1,16 @@
+* {
+  font-family: 'arial';
+  color:rgb(0,74,130);
+}
+.header {
+        <!--background-color: #EBEBEB;-->
+        opacity: 0.9;
+    }
+.tab_energy {
+  grid-area: tab_energy;
+  align-self: start;
+  background:lightblue;
+}
 
 table {
     counter-reset: tableCount;
@@ -46,29 +59,28 @@ height: 14px;
   grid-area: tab3;
   align-self: start;
 }
+.image_capex {
+  grid-area: image_capex;
+}
 
 .container {
   display: grid;
   width: auto;
   margin-left: 10 !important;
   gap: 5px 10px;
-  grid-template-columns: 400px 900px;
+  grid-template-columns: 20% 45% 35%;
   grid-template-rows: auto;
   grid-template-areas:
-  "input4 input4"
-    "input1 tab1"
-    "input2 tab2"
-    "input3 tab3";
+  "input4 input4 input4"
+    "input1 tab1 image_capex"
+    "input2 tab2 image_main"
+    "input3 tab3 image_energy";
 
 }
 label {
   width:180px;
   display: inline-block;
 }
-* {
-  font-family: open-sans;
-}
-
 
 from Capex:
 
@@ -91,9 +103,7 @@ from Capex:
     "tab_capex image_capex";
     }
 
-table {
-    counter-reset: tableCount;
-}
+
 .counterCell:before {
     content: counter(tableCount);
     counter-increment: tableCount;
@@ -119,3 +129,28 @@ from maintenance:
   grid-template-rows: auto;
   grid-template-areas:
     "tab_main image_main";
+
+
+.image_energy {
+  grid-area: image_energy;
+}
+
+
+.container_energy {
+  display: grid;
+  margin-left: 10px;
+  gap: 10px;
+  grid-template-columns: 50% 50%;
+  grid-template-rows: auto;
+  grid-template-areas:
+    "tab_energy image_energy";
+
+select:required:invalid {
+  color: #666;
+}
+option[value=""][disabled] {
+  display: none;
+}
+option {
+  color: #000;
+}

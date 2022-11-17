@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<style>
+* {
+  font-family: Arial, Helvetica, sans-serif;
+  color:rgb(0,74,130);
+}
+
+</style>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form>
+<select class="form-select form-select-sm" name="configuration" id="configuration">
+        <option selected disabled></option>
+        <optgroup label="Select preset configuration">
+            {% for a in configurations%}
+            <option>{{a}}
+            {% endfor %}
+
+    </select>
+
+</form>
+</body>
+</html>

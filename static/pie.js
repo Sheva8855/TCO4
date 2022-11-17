@@ -79,30 +79,6 @@ function addsmth(){
     document.getElementById("component_comment").value ='';
 }
 
-//var table = document.getElementById("myTable")
-//var tableLen = table.rows.length
-//var data = {labels: [], prices: []}
-//
-//for (var i = 1; i < component_names.length; i++) {
-//  data.labels.push(component_names[i])
-//  data.prices.push(component_prices[i])
-//}
-//var canvasP = document.getElementById("pieChart")
-//var ctxP = canvasP.getContext('2d')
-//var myPieChart = new Chart(ctxP, {
-//  type: 'pie',
-//  data: {
-//    labels: data1.labels,
-//    datasets: [{
-//      data: data.prices,
-//      backgroundColor: ["#64B5F6", "#FFD54F", "#2196F3", "#FFC107", "#1976D2", "#FFA000", "#0D47A1"],
-//      hoverBackgroundColor: ["#B2EBF2", "#FFCCBC", "#4DD0E1", "#FF8A65", "#00BCD4", "#FF5722", "#0097A7"]
-//    }]
-//  },
-//  options: {
-//    legend: {
-//      display: true,
-//      position: "right"
-//    }
-//  }
-//})
+
+
+
