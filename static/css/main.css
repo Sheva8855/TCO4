@@ -68,7 +68,7 @@ height: 14px;
   width: auto;
   margin-left: 10 !important;
   gap: 5px 10px;
-  grid-template-columns: 20% 45% 35%;
+  grid-template-columns: 3% 75% 22%;
   grid-template-rows: auto;
   grid-template-areas:
   "input4 input4 input4"
@@ -133,17 +133,17 @@ from maintenance:
 
 .image_energy {
   grid-area: image_energy;
+
 }
 
+.tab_energy{
+  grid-area: tab_energy;
+  display: inline-block;
+}
 
 .container_energy {
-  display: grid;
-  margin-left: 10px;
-  gap: 10px;
-  grid-template-columns: 50% 50%;
-  grid-template-rows: auto;
-  grid-template-areas:
-    "tab_energy image_energy";
+  display: inline-block;
+}
 
 select:required:invalid {
   color: #666;
@@ -153,4 +153,16 @@ option[value=""][disabled] {
 }
 option {
   color: #000;
+}
+
+.table_splits {
+  width:70px;
+  width: 500px;
+  overflow-x: auto;
+}
+
+input:required {
+  border-color: #800000;
+
+
 }

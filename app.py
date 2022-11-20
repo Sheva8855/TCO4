@@ -199,7 +199,44 @@ def form_page():
     plt.savefig('static/energy.png')
     years = range(0, n+1)
 
-    return render_template('form_page.html',energie=session["energie"],costs=costs,mains=mains, years=years,total_capex_direct=total_capex_direct, non_eq=non_eq,ot_eq=ot_eq,main_eq=main_eq,dr_eq=dr_eq,el_eq=el_eq,user_points=session["user_points"],user_maintenances=session["user_maintenances"],user_components=session["user_components"],sum=sum,message=message,component_list=component_list,a=a,m=m,eff_driver=eff_driver,eff_other=eff_other,power_pump=power_pump,power_aux=power_aux,scenario=scenario,k=k, i=i,j=j,component=component,component_price=component_price, comments=comments, main_type=main_type, period=period,main_price=main_price, main_comments=main_comments, unit_name=session["unit_name"], energy_price=energy_price, annual_increase=annual_increase, number_years=session["number_years"],project_name=session["project_name"], currency=session["currency"] )
+    #TCO
+    main=mains[-1]
+    total_capex_direct = 0
+    direct = []
+
+    for i in range(len(session["user_components"])):
+        total_capex_direct += int(session["user_components"][i][1])
+        direct.append(int(session["user_components"][i][1]))
+    direct.append(total_capex_direct)
+    session["capexy"] = total_capex_direct
+
+    prices = []
+    per = []
+    for maintenance in session["user_maintenances"]:
+        prices.append(int(maintenance[2]))
+        per.append(int(maintenance[1]))
+    n = int(session["number_years"])
+    i = 1
+    x = 0
+    mains = []
+    while i <= n:
+        for j in range(len(per)):
+            if i % per[j] == 0:
+                x += prices[j] * (1 + (annual_increase / 100)) ** (i - 1)
+        mains.append(round(x))
+        i += 1
+
+    labels = ['CAPEX', 'Maintenance', 'Energy']
+    if session["capexy"] > 0 and main > 0 and session["energie"] > 0:
+        sizes = [int(session["capexy"]), int(main), int(session["energie"])]
+
+        fig1, ax1 = plt.subplots()
+
+        ax1.pie(sizes, labels=labels, shadow=False, startangle=90)
+        ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+        plt.savefig('static/tco.png', bbox_inches=None)
+
+    return render_template('form_page.html',main=main,capexy=session["capexy"],energie=session["energie"],costs=costs,mains=mains, years=years,total_capex_direct=total_capex_direct, non_eq=non_eq,ot_eq=ot_eq,main_eq=main_eq,dr_eq=dr_eq,el_eq=el_eq,user_points=session["user_points"],user_maintenances=session["user_maintenances"],user_components=session["user_components"],sum=sum,message=message,component_list=component_list,a=a,m=m,eff_driver=eff_driver,eff_other=eff_other,power_pump=power_pump,power_aux=power_aux,scenario=scenario,k=k, i=i,j=j,component=component,component_price=component_price, comments=comments, main_type=main_type, period=period,main_price=main_price, main_comments=main_comments, unit_name=session["unit_name"], energy_price=energy_price, annual_increase=annual_increase, number_years=session["number_years"],project_name=session["project_name"], currency=session["currency"] )
 
 #Обработка формы добавление компонента
 @app.route('/form_page/add_component', methods=['POST','GET'])
@@ -208,11 +245,15 @@ def form_page_add_component():
 
     if request.method=="POST":
         #unit_components = Component.query.all()
-        component_price = request.form["component_price"]
-        comments = request.form["comments"]
         component = request.form["component"]
+        component_price = request.form["component_price"]
+        if component_price=='':
+            component_price=0
+        comments = request.form["comments"]
         if component=='' or component_price=='':
             return "Select component and enter its price"
+        if not "user_components" in session:
+            session["user_components"] = []
         session["user_components"].append([component,component_price,comments,n1])
         n1+=1
         for i in range(len(session["user_components"])):
@@ -229,7 +270,6 @@ def form_page_add_component():
 def form_page_add_maintenance():
     global n2
     if request.method=="POST":
-        #maintenances = Maintenance.query.all()
         main_type = request.form["main_type"]
         period = request.form["period"]
         if main_type=="Annual Maintenance-Spares" and period!=1:

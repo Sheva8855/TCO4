@@ -35,9 +35,7 @@
 //  chart.container('container2');
 //  chart.draw();
 //});
-
-
-}
+//}
 
 function autofill(){
     var x = document.getElementById('main_type').value;
@@ -79,6 +77,12 @@ function addsmth(){
     document.getElementById("component_comment").value ='';
 }
 
+function CompPrice(){
+    var x = document.getElementById('component_price').value;
+    if(x<0)
+    {
+        alert("price could not be Negative");
+    }
+}
 
-
-
+-200
