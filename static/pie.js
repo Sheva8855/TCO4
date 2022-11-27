@@ -45,17 +45,6 @@ function autofill(){
     }
 }
 
-//$( document ).ready(function() {
-//    $("#btn6").click(
-//		function(){
-////		    document.getElementById('result_form').innerHTML ='<br>Some new content!';
-//        	$('#result_form').html('Имя: ');
-//
-////			sendAjaxForm('result_form', 'ajax_form', 'action_ajax_form.php');
-//			return true;
-//		}
-//	);
-//});
 var component_names = localStorage.getItem("someVarKey");
 if (component_names=null) {
   component_names=[]
@@ -77,12 +66,35 @@ function addsmth(){
     document.getElementById("component_comment").value ='';
 }
 
-function CompPrice(){
-    var x = document.getElementById('component_price').value;
-    if(x<0)
-    {
-        alert("price could not be Negative");
-    }
+function changeValue(){
+    var y=event.target.id
+    var x=event.target.value
+//    document.getElementById('userupdate'+parseInt(y)).style.display = 'block';
+    var userdata = [{'item' : y},{'price' : x}];
+    $.ajax({
+    type: "POST",
+    url: "/ProcessPrice",
+    data: JSON.stringify(userdata),
+    contentType: "application/json",
+    dataType: 'json'
+    });
 }
 
--200
+function UserUpdate(){
+var y=event.target.id
+document.getElementById(y).style.display = 'none';
+}
+
+function checkPeriod(){
+var x=event.target.value
+if (x > 10 ) {
+    Swal.fire('Good job!','Periodity should be less than 10 years!','success')("periodity should be less than 10 years");
+    }
+}
+function popupWindow(url, windowName, win, w, h) {
+    const y = win.top.outerHeight / 2 + win.top.screenY - ( h / 2);
+    const x = win.top.outerWidth / 2 + win.top.screenX - ( w / 2);
+    return win.open(url, windowName, `toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=${w}, height=${h}, top=${y}, left=${x}`);
+}
+//ОГРАНИЧЕНИЕ ВСТАВКИ ТЕКСТА!!!
+//https://medium.com/@sampathsl/how-to-restrict-an-input-field-for-numeric-using-javascript-34142773a102
