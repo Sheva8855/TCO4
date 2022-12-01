@@ -233,7 +233,20 @@ def form_page():
         ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
         plt.savefig('static/tco.png', bbox_inches=None)
 
-    return render_template('form_page.html',info=session["info"],configurations=configurations,main=main,capexy=session["capexy"],energie=session["energie"],costs=costs,mains=mains, years=years,total_capex_direct=total_capex_direct, non_eq=non_eq,ot_eq=ot_eq,main_eq=main_eq,dr_eq=dr_eq,el_eq=el_eq,user_points=session["user_points"],user_maintenances=session["user_maintenances"],user_components=session["user_components"],sum=sum,message=message,component_list=component_list,a=a,m=m,eff_driver=eff_driver,eff_other=eff_other,power_pump=power_pump,power_aux=power_aux,scenario=scenario,k=k, i=i,j=j,component=component,component_price=component_price, comments=comments, main_type=main_type, period=period,main_price=main_price, main_comments=main_comments, unit_name=session["unit_name"], energy_price=energy_price, annual_increase=annual_increase, number_years=session["number_years"],project_name=session["project_name"], currency=session["currency"] )
+    #Efficiency
+    for i in session["user_points"]:
+        dr1=round((i[2] + i[3]) / (i[0] * i[1]) * 10000,2)
+        dr2=round(dr1-(i[2] + i[3]),2)
+        dr3=round(((i[2]+i[3])/(i[0]*i[1])*10000-(i[2]+i[3]))*(i[4]*725),2)
+        i[6]=dr1
+        i[7]=dr2
+        i[8]=dr3
+    total_loss=0
+    for i in session["user_points"]:
+        total_loss+=i[8]
+    dr4=round(total_loss*float(energy_price),2)
+
+    return render_template('form_page.html',dr4=dr4,total_loss=total_loss,info=session["info"],configurations=configurations,main=main,capexy=session["capexy"],energie=session["energie"],costs=costs,mains=mains, years=years,total_capex_direct=total_capex_direct, non_eq=non_eq,ot_eq=ot_eq,main_eq=main_eq,dr_eq=dr_eq,el_eq=el_eq,user_points=session["user_points"],user_maintenances=session["user_maintenances"],user_components=session["user_components"],sum=sum,message=message,component_list=component_list,a=a,m=m,eff_driver=eff_driver,eff_other=eff_other,power_pump=power_pump,power_aux=power_aux,scenario=scenario,k=k, i=i,j=j,component=component,component_price=component_price, comments=comments, main_type=main_type, period=period,main_price=main_price, main_comments=main_comments, unit_name=session["unit_name"], energy_price=energy_price, annual_increase=annual_increase, number_years=session["number_years"],project_name=session["project_name"], currency=session["currency"] )
 
 #Обработка формы добавление компонента
 @app.route('/form_page/add_component', methods=['POST','GET'])
@@ -387,45 +400,7 @@ def delete_component(id):
     except:
         return "При удалении компонента произошла ошибка"
 
-@app.route('/maintenance', methods=['POST','GET'])
-def maintenance():
-     prices=[]
-     per=[]
-     for maintenance in session["user_maintenances"]:
-         prices.append(int(maintenance[2]))
-         per.append(int(maintenance[1]))
 
-     n=int(session["number_years"])
-
-     i = 1
-     x = 0
-     mains=[]
-     while i <= n:
-         for j in range(len(per)):
-             if i%per[j]==0:
-                x+=prices[j] * (1 + (float(annual_increase) / 100)) ** (i - 1)
-         mains.append(round(x))
-         i+=1
-
-     session["main"]=mains[-1]
-     a = np.array(mains)
-     # #     b = np.array(main_vfd)
-     plt.switch_backend('agg')
-     plt.plot(a, label='Costs')
-#     plt.plot(b, label='VFD')
-     plt.title('Mainenance Cost for '+ session["unit_name"])
-     plt.xlabel('Year')
-     plt.ylabel('Maintenance Cost, ' + session["currency"])
-     plt.legend()
-     plt.grid()
-     plt.xticks(np.arange(1, n + 1, 1.0))
-     plt.rcParams["figure.figsize"] = (16, 8)
-     plt.savefig('static/maintenance.png')
-     years=range(1,n+1)
-
-     return render_template('maintenance.html',mains=mains,a=a, years=years, unit_name=session["unit_name"], currency=session["currency"])
-
-#Конец обработки форм
 
 @app.route('/efficiency', methods=['POST','GET'])
 def efficiency():
@@ -447,46 +422,11 @@ def efficiency():
     # energy_price = generals[-1].energy_price
     return render_template('efficiency.html',currency=session["currency"],dr4=dr4,total_loss=total_loss,user_points=session["user_points"],unit_name=session["unit_name"],energy_price=energy_price,annual_increase=annual_increase)
 
-@app.route('/energy', methods=['POST','GET'])
-def energy():
-    return render_template('energy.html',costs=costs,years=years,energy_price=energy_price,annual_increase=annual_increase, currency=session["currency"])
-
 
 @app.route('/tco', methods=['POST', 'GET'])
 def tco():
     return render_template('tco.html',capexy=session["capexy"],main=main,energie=energie, currency=session["currency"], labels=labels,number_years=session["number_years"])
 
-@app.route('/capex', methods=['POST','GET'])
-def capex():
-    total_capex_direct=0
-    direct=[]
-    for i in range(len(session["user_components"])):
-        total_capex_direct+=int(session["user_components"][i][1])
-        direct.append(int(session["user_components"][i][1]))
-    session["capexy"]=total_capex_direct
-    labels=[]
-    # for j in range(len(unit_components)):
-    #     labels.append(unit_components[j].component)
-    # labels.append('total_capex_direct')
-
-    for j in range(len(session["user_components"])):
-        labels.append(session["user_components"][j][0])
-    labels.append('total_capex')
-
-    labels.pop()
-    sizes = direct
-    fig1, ax1 = plt.subplots()
-    ax1.pie(sizes, labels=labels,shadow=False, startangle=90,autopct='%1.0f%%')
-    plt.title("CAPEX for "+session["unit_name"])
-    ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
-    fig1.set_size_inches(6.8, 4.8)
-    plt.show()
-    plt.savefig('static/capex2.png')
-
-    try:
-        return render_template('capex.html',user_components=session["user_components"],x=x,unit_name=session["unit_name"],total_capex_direct=total_capex_direct, currency=session["currency"], project_name=session["project_name"])
-    except:
-        return render_template('capex.html', user_components=session["user_components"],unit_name=session["unit_name"],total_capex_direct=total_capex_direct, currency=session["currency"], project_name=session["project_name"])
 
 @app.route('/ProcessPrice/',methods=['POST','GET'])
 def ProcessPrice():
