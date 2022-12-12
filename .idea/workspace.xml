@@ -2,17 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4e028a6a-5d2c-4455-a0fe-077c89dc68a7" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/flask_session/2029240f6d1128be89ddc32729463129" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/flask_session/65d3519408e6b39c517a09fa6a724bf5" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/flask_session/935e9815c0a1461ba9952a10ba3263c5" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/flask_session/dc17832d15ab538f2d138d70772db18a" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/capex2.png" beforeDir="false" afterPath="$PROJECT_DIR$/static/capex2.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/css/main.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/css/main.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/pie.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/pie.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/form_page.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/form_page.html" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
