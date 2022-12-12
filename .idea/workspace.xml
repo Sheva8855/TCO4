@@ -11,10 +11,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="form_page.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="form_page.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/templates/form_page.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="221">
+            <state relative-caret-position="1241">
               <caret line="73" column="122" selection-start-line="73" selection-start-column="122" selection-end-line="73" selection-end-column="122" />
               <folding>
                 <element signature="n#style#0;n#section#0;n#!!top" expanded="true" />
@@ -85,10 +85,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="app.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="app.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="323">
+            <state relative-caret-position="2363">
               <caret line="139" column="33" selection-start-line="431" selection-start-column="4" selection-end-line="431" selection-end-column="16" />
               <folding>
                 <element signature="e#0#98#0" expanded="true" />
@@ -242,14 +242,14 @@
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.27344573" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.27344573" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.3294893" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5073762" side_tool="true" visible="true" weight="0.28073993" />
       <window_info anchor="bottom" id="Version Control" order="9" sideWeight="0.49894625" weight="0.32861805" />
       <window_info anchor="bottom" id="Python Console" order="7" sideWeight="0.49894625" weight="0.32861805" />
       <window_info anchor="bottom" id="Run" order="2" sideWeight="0.42992625" weight="0.11316649" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="8" sideWeight="0.4926238" visible="true" weight="0.28073993" />
+      <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.4926238" visible="true" weight="0.28073993" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -825,26 +825,16 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="139" column="33" selection-start-line="431" selection-start-column="4" selection-end-line="431" selection-end-column="16" />
-          <folding>
-            <element signature="e#0#98#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/requirements.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="99">
+        <state relative-caret-position="126">
           <caret line="27" column="13" selection-start-line="27" selection-start-column="13" selection-end-line="27" selection-end-column="13" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/form_page.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
+        <state relative-caret-position="1241">
           <caret line="73" column="122" selection-start-line="73" selection-start-column="122" selection-end-line="73" selection-end-column="122" />
           <folding>
             <element signature="n#style#0;n#section#0;n#!!top" expanded="true" />
@@ -887,6 +877,16 @@
             <element signature="n#style#0;n#button#2;n#!!top" expanded="true" />
             <element signature="n#style#0;n#div#7;n#!!top" expanded="true" />
             <element signature="n#style#0;n#div#8;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2363">
+          <caret line="139" column="33" selection-start-line="431" selection-start-column="4" selection-end-line="431" selection-end-column="16" />
+          <folding>
+            <element signature="e#0#98#0" expanded="true" />
           </folding>
         </state>
       </provider>
