@@ -43,7 +43,6 @@ def reset():
 @app.route('/', methods=['POST','GET'])
 @app.route('/form_page', methods=['POST','GET'])
 def form_page():
-    session.modified = True
     if not "info" in session:
         session["info"] = []
     if not "energie" in session:
@@ -246,6 +245,7 @@ def form_page():
         total_loss+=i[8]
     dr4=round(total_loss*float(energy_price),2)
 
+    session.modified = True
     return render_template('form_page.html',dr4=dr4,total_loss=total_loss,info=session["info"],configurations=configurations,main=main,capexy=session["capexy"],energie=session["energie"],costs=costs,mains=mains, years=years,total_capex_direct=total_capex_direct, non_eq=non_eq,ot_eq=ot_eq,main_eq=main_eq,dr_eq=dr_eq,el_eq=el_eq,user_points=session["user_points"],user_maintenances=session["user_maintenances"],user_components=session["user_components"],sum=sum,message=message,component_list=component_list,a=a,m=m,eff_driver=eff_driver,eff_other=eff_other,power_pump=power_pump,power_aux=power_aux,scenario=scenario,k=k, i=i,j=j,component=component,component_price=component_price, comments=comments, main_type=main_type, period=period,main_price=main_price, main_comments=main_comments, unit_name=session["unit_name"], energy_price=energy_price, annual_increase=annual_increase, number_years=session["number_years"],project_name=session["project_name"], currency=session["currency"] )
 
 #Обработка формы добавление компонента
@@ -440,6 +440,14 @@ def ProcessPrice():
         y=y[6:]
         session["info"]=[int(y),int(x)]
         session["user_components"][int(y)][1]=int(x)
+
+    return redirect(url_for('form_page'))
+
+@app.route('/ProcessPrice2/',methods=['POST','GET'])
+def ProcessPrice2():
+    if request.method == "POST":
+        session["info"].append(1)
+
     return redirect(url_for('form_page'))
 
 @app.route('/create_pdf', methods=['POST','GET'])
@@ -452,3 +460,4 @@ def select_conf():
 
 if __name__=="__main__":
     app.run(debug=True)
+    app.config["TEMPLATES_AUTO_RELOAD"] = True

@@ -70,7 +70,11 @@
                         <input size=14 style="border:none;background-color:white;" type="text" value="{{i[0]}}" placeholder="{{i[0]}}" id="component {{i[3]}}" disabled>
                     </td>
                     <td >
-                        <input style="width: 50%;text-align: center;"  type="number" value="{{i[1]}}" placeholder="{{i[1]}}" onchange="changeValue()" id="price {{i[3]}}" size="4"> {{currency}}
+                        <form action="/ProcessPrice2" method="POST" name="changeprice" autocomplete="off" id="changeprice">
+                        <input style="width: 50%;text-align: center;"  name="name{{i[3]}}" type="number" value="{{i[1]}}" onchange="submitForm(this)" id="price {{i[3]}}" size="4"> {{currency}}
+                        </form>
+                            <!--<input style="width: 50%;text-align: center;"  type="number" value="{{i[1]}}" placeholder="{{i[1]}}" onchange="changeValue()" id="price {{i[3]}}" size="4"> {{currency}}-->
+
                         <button style="display: none;" id="userupdate{{i[3]}}" onclick="UserUpdate()">update</button>
                     </td>
 
@@ -91,6 +95,7 @@
           </tbody>
       </table>
       <br>...{{info}}
+      <br> {{user_components}}
   </div>
 
   <div class="image_capex">
@@ -442,7 +447,7 @@ btn3.onclick = function () {
 };
 </script>
 <br>
-<div id="tco" style="margin-left:30px; border:1px solid black;" >
+<div id="tco" style="margin-left:30px; border:1px solid black;height:300px;" >
     <h3>TCO for project {{project_name}}, item {{unit_name}}</h3>
     <section class="container_tco">
         <p>capex: {{capexy}} {{currency}}</p>
