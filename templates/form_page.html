@@ -10,8 +10,7 @@
 
 <section class="container" style="margin-left:15px;">
 
-  <div class="input1" style="display: table;">
-      <div style="transform: rotate(-90deg);display: table-cell; vertical-align: middle;">CAPEX</div>
+  <div class="input1" style="display: flex;justify-content: center;align-items: center;text-align: center;"><p style="writing-mode:vertical-rl;transform: scale(-1);">CAPEX</p>
   </div>
 
   <div class="tab1">
@@ -96,18 +95,30 @@
       </table>
       <br>...{{info}}
       <br> {{user_components}}
+      <br>
+        {% for item in data %}
+        <span onclick='somefunction({{item | tojson}})';>{{ item }}</span>
+        {% endfor %}
+      <br>
+      <script type="text/javascript">
+        function test_func(data) {
+        console.log(data);
+        }
+        test_func({{ data|safe }})
+      </script>
+
   </div>
 
-  <div class="image_capex">
+  <div class="image_capex" style="padding:5px">
     {% if total_capex_direct==0 %}
-    <br><br>No figure to display
+    <br><br><div align="middle">No figure to display</div>
     {%else%}
     <img src="{{url_for('static', filename='capex2.png')}}" align="middle" alt="Capex pic" />
     {%endif%}
   </div>
 
-  <div class="input2" style="display: table; max-width:70px;white-space: nowrap;">
-       <div style="transform: rotate(-90deg);display: table-cell; vertical-align: middle;white-space: max-width:70px;white-space: nowrap;"></div>
+    <div class="input2" style="display: flex;justify-content: center;align-items: center;text-align: center;"><p style="writing-mode:vertical-rl;transform: scale(-1);">Maintenance</p>
+
   </div>
 
   <div class="tab2">
@@ -187,15 +198,15 @@
 
   </div>
 
-  <div class="image_main">
+  <div class="image_main" style="padding:5px">
     {% if mains[-1]==0 %}
-    <br><br> No figure to display
+      <br><br> <div align="middle">No figure to display</div>
     {%else%}
-    <img src="{{url_for('static', filename='maintenance.png')}}" align="middle" width="800" height="400"/>
+    <img src="{{url_for('static', filename='maintenance.png')}}" align="middle" width="680" height="340"/>
     {%endif%}
   </div>
 
-  <div class="input3">
+  <div class="input3" style="display: flex;justify-content: center;align-items: center;text-align: center;"><p style="writing-mode:vertical-rl;transform: scale(-1);">Operating Points</p>
   </div>
 
   <div class="tab3">
@@ -276,7 +287,7 @@
 
   <div class="image_energy">
     {% if costs[-1]==0 %}
-    <br><br> No figure to display
+    <br><br> <div align="middle">No figure to display</div>
     {%else%}
     <img src="{{url_for('static', filename='energy.png')}}" align="middle" width="800" height="400"/>
     {%endif%}
@@ -351,36 +362,9 @@
 
 <p></p>
 
-<div id="maintenance_block" style="margin-left:30px; border:1px solid black;" >
-    <h3>Maintenance for project {{project_name}}, item {{unit_name}}</h3>
-    <section class="container_main">
-        <div class="tab_main">
-            <b>Total Maintenance Cost: {{main}} {{currency}}</b><br>
-        </div>
-        <div class="image_main">
-        </div>
-    </section>
-</div>
-
-<button id="toggle2" onclick="changeclass(this);" class="btn btn-primary btn-sm" style="margin-left:30px; margin-bottom:30px;">Hide Maintenance block</button>
-<script>
-    const targetDiv3 = document.getElementById("maintenance_block");
-const btn2 = document.getElementById("toggle2");
-btn2.onclick = function () {
-  if (targetDiv3.style.display !== "none") {
-    targetDiv3.style.display = "none";
-    btn2.innerHTML="Show Maintenance block";
-    btn2.className="btn btn-primary btn-sm";
-  } else {
-    targetDiv3.style.display = "block";
-    btn2.innerHTML="Hide Maintenance block";
-    btn2.className="btn btn-danger btn-sm";
-  }
-};
-</script>
 <br>
 
-<div id="energy_block" style="margin-left:30px; border:1px solid black;" >
+<div id="energy_block" style="margin-left:30px; border:1px solid black;width: 1600px;border-style: solid;border-radius: 15px;padding: 5px;" >
     <h3>Energy evaluation for project {{project_name}}, item {{unit_name}}</h3>
     <p>Energy Price: {{energy_price}} {{currency}}/kWh</p>
     <p>Annual Price Increase:  {{annual_increase}} %</p>
@@ -447,7 +431,7 @@ btn3.onclick = function () {
 };
 </script>
 <br>
-<div id="tco" style="margin-left:30px; border:1px solid black;height:300px;" >
+<div id="tco" style="margin-left:30px; border:1px solid black;height:300px;width: 1600px;border-style: solid;border-radius: 15px;padding: 5px;" >
     <h3>TCO for project {{project_name}}, item {{unit_name}}</h3>
     <section class="container_tco">
         <p>capex: {{capexy}} {{currency}}</p>

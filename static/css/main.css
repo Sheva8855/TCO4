@@ -85,6 +85,21 @@ height: 14px;
 }
 .image_capex {
   grid-area: image_capex;
+  border-style: solid;
+  border-radius: 15px;
+}
+
+.image_main {
+  grid-area: image_main;
+  border-style: solid;
+  border-radius: 15px;
+}
+.image_energy {
+  grid-area: image_energy;
+  border-style: solid;
+  border-radius: 15px;
+  min-height:300px;
+  padding: 5px;
 }
 
 .container {
@@ -92,7 +107,7 @@ height: 14px;
   width: auto;
   margin-left: 10 !important;
   gap: 5px 5px;
-  grid-template-columns: 50px 900px 700px;
+  grid-template-columns: 40px 850px 700px;
   grid-template-rows: auto;
   grid-template-areas:
     "input4 input4 input4"
@@ -108,24 +123,13 @@ label {
 
 from Capex:
 
-.image_capex {
-  grid-area: image_capex;
-}
 
 .tab_capex {
   grid-area: tab_capex;
   align-self: top;
   background:lightblue;
 }
-.container_capex {
-  display: grid;
-  margin-left: 10px;
-  gap: 10px 10px;
-  grid-template-columns: 400px 500px;
-  grid-template-rows: auto;
-  grid-template-areas:
-    "tab_capex image_capex";
-    }
+
 
 
 .counterCell:before {
@@ -136,29 +140,13 @@ ul {list-style-type: decimal;}
 
 from maintenance:
 
-.image_main {
-  grid-area: image_main;
-}
-
 .tab_main {
   grid-area: tab_main;
   align-self: start;
   background:lightblue;
 }
-.container_main {
-  display: grid;
-  margin-left: 10px;
-  gap: 10px;
-  grid-template-columns: 300px 900px;
-  grid-template-rows: auto;
-  grid-template-areas:
-    "tab_main image_main";
 
 
-.image_energy {
-  grid-area: image_energy;
-
-}
 
 .tab_energy{
   grid-area: tab_energy;
@@ -167,6 +155,7 @@ from maintenance:
 
 .container_energy {
   display: inline-block;
+  width: 1400px;
 }
 
 select:required:invalid {
