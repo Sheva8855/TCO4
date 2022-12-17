@@ -93,19 +93,19 @@
             </tr>
           </tbody>
       </table>
-      <br>...{{info}}
-      <br> {{user_components}}
-      <br>
-        {% for item in data %}
-        <span onclick='somefunction({{item | tojson}})';>{{ item }}</span>
-        {% endfor %}
-      <br>
-      <script type="text/javascript">
-        function test_func(data) {
-        console.log(data);
-        }
-        test_func({{ data|safe }})
-      </script>
+      <!--<br>...{{info}}-->
+      <!--<br> {{user_components}}-->
+      <!--<br>-->
+        <!--{% for item in data %}-->
+        <!--<span onclick='somefunction({{item | tojson}})';>{{ item }}</span>-->
+        <!--{% endfor %}-->
+      <!--<br>-->
+      <!--<script type="text/javascript">-->
+        <!--function test_func(data) {-->
+        <!--console.log(data);-->
+        <!--}-->
+        <!--test_func({{ data|safe }})-->
+      <!--</script>-->
 
   </div>
 
