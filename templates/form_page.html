@@ -8,13 +8,360 @@
 {%block body%}
 
 
-<section class="container" style="margin-left:15px;">
+<!--<section class="container" style="margin-left:15px;">-->
 
-  <div class="input1" style="display: flex;justify-content: center;align-items: center;text-align: center;"><p style="writing-mode:vertical-rl;transform: scale(-1);">CAPEX</p>
-  </div>
+  <!--<div class="input1" style="display: flex;justify-content: center;align-items: center;text-align: center;"><p style="writing-mode:vertical-rl;transform: scale(-1);">CAPEX</p>-->
+  <!--</div>-->
 
-  <div class="tab1">
+  <!--<div class="tab1" style="display: flex;">-->
 
+      <!--<table class="table table-sm">-->
+          <!--<form action="/form_page/add_component" method="POST" name="unit_data" autocomplete="off" id="unit_data">-->
+              <!--<fieldset>-->
+                  <!--<div class="form-row">-->
+                    <!--<thead>-->
+                        <!--<tr>-->
+                            <!--<th scope="col">-->
+                            <!--</th>-->
+                            <!--<th scope="col">-->
+                                <!--<select class="form-select form-select-sm" name="component" id="component" required>-->
+                                        <!--<option value="" disabled selected>Component name</option>-->
+                                        <!--<optgroup label="Main Equipment">-->
+                                        <!--{% for a in main_eq%}-->
+                                        <!--<option>{{a}}-->
+                                        <!--{% endfor %}-->
+                                        <!--</optgroup>-->
+                                        <!--<optgroup label="Driver Type">-->
+                                        <!--{% for a in dr_eq%}-->
+                                        <!--<option>{{a}}-->
+                                        <!--{% endfor %}-->
+                                        <!--<optgroup label="Electrical Equipment">-->
+                                        <!--{% for a in el_eq%}-->
+                                        <!--<option>{{a}}-->
+                                        <!--{% endfor %}-->
+                                        <!--<optgroup label="Other">-->
+                                        <!--{% for a in ot_eq%}-->
+                                        <!--<option>{{a}}-->
+                                        <!--{% endfor %}-->
+                                        <!--<optgroup label="Non equipment scope">-->
+                                        <!--{% for a in non_eq%}-->
+                                        <!--<option>{{a}}-->
+                                        <!--{% endfor %}-->
+                                <!--</select>-->
+                            <!--</th>-->
+                            <!--<th scope="col"><input style="width: 80%;" type="number" name="component_price" id="component_price" onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))" placeholder="Component price" min=0 step="100" class="form-control form-control-sm" onfocus="" onblur="this.placeholder='Component price'"></th>-->
+                            <!--<th scope="col"><input style="width: 70%;" type="text" name="comments" id="comments" placeholder="Comments" class="form-control form-control-sm" onfocus="" onblur="this.placeholder='Comments'">-->
+                            <!--</th>-->
+                            <!--<th scope="col" style="text-align:right !important"> <button type="submit" class="btn btn-outline-primary btn-sm" onclick="document.forms.unit_data.submit()" style="width: 150px;">Add component</button>-->
+                            <!--</th>-->
+                        <!--</tr>-->
+                    <!--</thead>-->
+                  <!--</div>-->
+              <!--</fieldset>-->
+          <!--</form>-->
+          <!--<tbody>-->
+            <!--{% for i in user_components %}-->
+            <!--<tr >-->
+                <!--<form>-->
+                    <!--<td class="counterCell">-->
+                    <!--</td>-->
+                    <!--<td>-->
+                        <!--<input size=14 style="border:none;background-color:white;" type="text" value="{{i[0]}}" placeholder="{{i[0]}}" id="component {{i[3]}}" disabled>-->
+                    <!--</td>-->
+                    <!--<td >-->
+                        <!--<form action="/ProcessPrice2" method="POST" name="changeprice" autocomplete="off" id="changeprice">-->
+                        <!--<input style="width: 80%;text-align: center;"  name="name{{i[3]}}" type="number" value="{{i[1]}}" onchange="submitForm(this)" id="price {{i[3]}}" size="4"> {{currency}}-->
+                        <!--</form>-->
+                            <!--&lt;!&ndash;<input style="width: 50%;text-align: center;"  type="number" value="{{i[1]}}" placeholder="{{i[1]}}" onchange="changeValue()" id="price {{i[3]}}" size="4"> {{currency}}&ndash;&gt;-->
+
+                        <!--<button style="display: none;" id="userupdate{{i[3]}}" onclick="UserUpdate()">update</button>-->
+                    <!--</td>-->
+
+                    <!--<td>-->
+                        <!--<input style="width: 70%;text-align: center;" type="text" value="{{i[2]}}" placeholder="{{i[2]}}" onchange="" id="comment {{i[3]}}">-->
+                    <!--</td>-->
+                    <!--<td align="right">-->
+                        <!--<a class="btn btn-outline-warning btn-sm" href='/form_page/{{i[3]}}/del'>Delete</a>-->
+                    <!--</td>-->
+                 <!--</form>-->
+            <!--</tr>-->
+            <!--{% endfor %}-->
+            <!--<tr>-->
+                <!--<td></td>-->
+                <!--<td><b>Total CAPEX Cost:</td>-->
+                <!--<td style="text-align: center"><b>{{total_capex_direct}} {{currency}}</td>-->
+            <!--</tr>-->
+          <!--</tbody>-->
+      <!--</table>-->
+      <!--&lt;!&ndash;<br>...{{info}}&ndash;&gt;-->
+      <!--&lt;!&ndash;<br> {{user_components}}&ndash;&gt;-->
+      <!--&lt;!&ndash;<br>&ndash;&gt;-->
+        <!--&lt;!&ndash;{% for item in data %}&ndash;&gt;-->
+        <!--&lt;!&ndash;<span onclick='somefunction({{item | tojson}})';>{{ item }}</span>&ndash;&gt;-->
+        <!--&lt;!&ndash;{% endfor %}&ndash;&gt;-->
+      <!--&lt;!&ndash;<br>&ndash;&gt;-->
+      <!--&lt;!&ndash;<script type="text/javascript">&ndash;&gt;-->
+        <!--&lt;!&ndash;function test_func(data) {&ndash;&gt;-->
+        <!--&lt;!&ndash;console.log(data);&ndash;&gt;-->
+        <!--&lt;!&ndash;}&ndash;&gt;-->
+        <!--&lt;!&ndash;test_func({{ data|safe }})&ndash;&gt;-->
+      <!--&lt;!&ndash;</script>&ndash;&gt;-->
+
+  <!--</div>-->
+
+  <!--<div class="image_capex" style="padding:5px;">-->
+    <!--{% if total_capex_direct==0 %}-->
+    <!--<br><br><div align="middle">No figure to display</div>-->
+    <!--{%else%}-->
+    <!--<img src="{{url_for('static', filename='capex2.png')}}" align="middle" alt="Capex pic" />-->
+    <!--{%endif%}-->
+  <!--</div>-->
+
+    <!--<div class="input2" style="display: flex;justify-content: center;align-items: center;text-align: center;"><p style="writing-mode:vertical-rl;transform: scale(-1);">Maintenance</p>-->
+
+  <!--</div>-->
+
+  <!--<div class="tab2">-->
+      <!--<form action="/form_page/add_maintenance" method="POST" name="maintenance" autocomplete="off" id="maintenance">-->
+      <!--<fieldset>-->
+         <!--<div class="form-row">-->
+            <!--<table class="table table-striped table-sm">-->
+                <!--<thead>-->
+                    <!--<tr>-->
+                        <!--<th scope="col">-->
+                        <!--</th>-->
+                        <!--<th>-->
+                            <!--<input size=15 name="main_type" class="form-control form-control-sm" list=maintenances placeholder="Maintenance type" onchange="autofill()" id='main_type' required/>-->
+                            <!--<datalist id=maintenances>-->
+                                <!--<label>-->
+                                    <!--or select from the list:-->
+                                    <!--<select name=main_type>-->
+                                        <!--<option value="">-->
+                                        <!--<option>Annual Maintenance-Spares-->
+                                        <!--<option>Major Overhaul-Spares-->
+                                        <!--<option>Labor costs-->
+                                    <!--</select>-->
+                                <!--</label>-->
+                            <!--</datalist></td>-->
+                        <!--</th>-->
+                        <!--<th scope="col" style="width:180px">-->
+                            <!--<input type="number" name="period" id="period" placeholder="Periodity,yr" min=0 max=10 onchange="checkPeriod()" onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))" class="form-control form-control-sm" onfocus="" onblur="this.placeholder='Periodity,year'">-->
+                        <!--</th>-->
+                        <!--<th> <input type="number" name="main_price" id="main_price" onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))" placeholder="Maintenance price" min=0 step="100" class="form-control form-control-sm" onfocus="" onblur="this.placeholder='Maintenance price'">-->
+                        <!--</th>-->
+                        <!--<th><input type="text" name="main_comments" id="main_comments" placeholder="Comments" class="form-control form-control-sm" onfocus="" onblur="this.placeholder='Comments'">-->
+                        <!--</th>-->
+                        <!--<th style="text-align:right !important"><button type="submit" class="btn btn-outline-primary btn-sm" onclick="document.forms.maintenance.submit()" style="width: 150px;text-align:right !important;">Add maintenance</button>-->
+                        <!--</th>-->
+                    <!--</tr>-->
+                <!--</thead>-->
+                <!--<tbody>-->
+                <!--{% for j in user_maintenances %}-->
+                    <!--<tr>-->
+                        <!--<td class="counterCell">-->
+                        <!--</td>-->
+                        <!--<td>{{j[0]}}-->
+                        <!--</td>-->
+                        <!--<td style="text-align: center;">{{j[1]}} yr-->
+                        <!--</td>-->
+                        <!--<td style="text-align: center;">{{j[2]}} {{currency}}-->
+                        <!--</td>-->
+                        <!--<td>{{j[3]}}</td>-->
+                        <!--<td align="right"><a class="btn btn-outline-warning btn-sm" href='/form_page/{{j[4]}}/del_man'>Delete</a></td>-->
+                    <!--</tr>-->
+                    <!--{% endfor %}-->
+                <!--</tbody>-->
+            <!--</table>-->
+         <!--</div>-->
+      <!--</fieldset>-->
+      <!--</form>-->
+      <!--<br>...<br>-->
+      <!--<b>Total Maintenance Cost: {{session["main"]}} {{currency}}</b>-->
+            <!--{% if mains[-1]==0 %}-->
+
+    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+        <!--{%else%}-->
+        <!--<table style="display:block;overflow-x: auto;" >-->
+            <!--<tboby>-->
+            <!--<tr>{% for x in years %}-->
+                <!--<td>-->
+            <!--<div class="table_splits" style="width:auto;border:1px solid black;padding: 2px;font-size: 0.875em;">-->
+            <!--{{ x }}yr-->
+                <!--<br>{{mains[x]}}{{currency}}-->
+            <!--</div>-->
+                <!--</td>-->
+            <!--{% endfor %}-->
+            <!--</tr>-->
+            <!--</tboby>-->
+        <!--</table>-->
+        <!--{% endif %}-->
+
+  <!--</div>-->
+
+  <!--<div class="image_main" style="padding:5px">-->
+    <!--{% if mains[-1]==0 %}-->
+      <!--<br><br> <div align="middle">No figure to display</div>-->
+    <!--{%else%}-->
+    <!--<img src="{{url_for('static', filename='maintenance.png')}}" align="middle" width="680" height="340"/>-->
+    <!--{%endif%}-->
+  <!--</div>-->
+
+  <!--<div class="input3" style="display: flex;justify-content: center;align-items: center;text-align: center;"><p style="writing-mode:vertical-rl;transform: scale(-1);">Operating Points</p>-->
+  <!--</div>-->
+
+  <!--<div class="tab3">-->
+      <!--<table class="table table-striped table-sm">-->
+          <!--<thead>-->
+            <!--<form action="/form_page/add_point" method="POST" name="oper_points">-->
+                <!--<fieldset id="points">-->
+                    <!--<div class="form-row">-->
+                        <!--<th scope="col">-->
+                        <!--</th>-->
+                        <!--<th style="width:200px" scope="col">-->
+                            <!--<div text-align="right"><input type="number" name="eff_driver" id="eff_driver" placeholder="Efficiency - Driver,%" min="0" max="100" class="form-control form-control-sm" onfocus="" onblur="this.placeholder='Efficiency - Driver,%'">-->
+                                                            <!--<input size=20 type="number" name="eff_other" id="eff_other" placeholder="Efficiency - Others,%" min="0" max="100" class="form-control form-control-sm" onfocus="" onblur="this.placeholder='Efficiency - Others,%'">-->
+                        <!--</th>-->
+                        <!--<th style="width:205px" scope="col"><input size=20 type="number" name="power_pump" id="power_pump" placeholder="Power Consump-Main,kW" min="0" class="form-control form-control-sm" onfocus="" onblur="this.placeholder='Power Consump-Main,kW'">-->
+                                                        <!--<input size=20 type="number" name="power_aux" id="power_aux" placeholder="Power Consump-Aux,kW" min="0" class="form-control form-control-sm" onfocus="" onblur="this.placeholder='Power Consump-Aux,kW'">-->
+                        <!--</th>-->
+                        <!--<th scope="col" style="width:220px"><input size=20 type="number" list=scenarios name="scenario" id="scenario" placeholder="Oper. Scenario,months/year" min="0" max="12" step="1" class="form-control form-control-sm" onfocus="" onblur="this.placeholder='Oper. Scenario,months/year'">-->
+                          <!--<datalist id=scenarios>-->
+                            <!--<label>-->
+                                    <!--or select from the list:-->
+                                <!--<select name=scenario>-->
+                                <!--<option value="">-->
+                                <!--<option>1-->
+                                <!--<option>2-->
+                                <!--<option>3-->
+                                <!--<option>4-->
+                                <!--<option>5-->
+                                <!--<option>6-->
+                                <!--<option>7-->
+                                <!--<option>8-->
+                                <!--<option>9-->
+                                <!--<option>10-->
+                                <!--<option>11-->
+                                <!--<option>12-->
+                                <!--</select>-->
+                            <!--</label>-->
+                          <!--</datalist></td>-->
+                        <!--</th>-->
+                        <!--<th scope="col" style="text-align:right !important">-->
+                            <!--<button type="submit" class="btn btn-outline-primary btn-sm" onclick="document.forms.oper_points.submit()">Add operating point-->
+                            <!--</button>-->
+                        <!--</th>-->
+                    <!--</div>-->
+                <!--</fieldset>-->
+            <!--</form>-->
+          <!--</thead>-->
+          <!--<tbody>-->
+            <!--{% for k in user_points %}-->
+            <!--<tr>-->
+              <!--<td class="counterCell"></td>-->
+              <!--<td style="text-align:center" >{{k[0]}} % <br> {{k[1]}} %</td>-->
+              <!--<td style="text-align: center">{{k[2]}} kW<br> {{k[3]}} kW</td>-->
+              <!--<td style="text-align: center">{{k[4]}} months/yr</td>-->
+              <!--<td align="right"><a class="btn btn-outline-warning btn-sm" href='/form_page/{{k[5]}}/del_point'>Delete</a></td>-->
+            <!--</tr>-->
+            <!--{% endfor %}-->
+          <!--</tbody>-->
+      <!--</table>-->
+      <!--<br>...<br>-->
+      <!--<b>Total Energy Cost: {{energie}} {{currency}}</b>-->
+      <!--{% if costs[-1]==0 %}-->
+      <!--{%else%}-->
+      <!--<table style="display:block;overflow-x: auto;" >-->
+        <!--<tboby>-->
+            <!--<tr>{% for x in years %}-->
+                <!--<td>-->
+                    <!--<div class="table_splits" style="width:auto;border:1px solid black;padding: 2px;font-size: 0.875em;">-->
+                    <!--{{ x }}yr<br>{{costs[x]}}{{currency}}-->
+                    <!--</div>-->
+                <!--</td>-->
+                <!--{% endfor %}-->
+            <!--</tr>-->
+        <!--</tboby>-->
+      <!--</table>-->
+      <!--{% endif %}-->
+  <!--</div>-->
+
+  <!--<div class="image_energy">-->
+    <!--{% if costs[-1]==0 %}-->
+    <!--<br><br> <div align="middle">No figure to display</div>-->
+    <!--{%else%}-->
+    <!--<img src="{{url_for('static', filename='energy.png')}}" align="middle" width="800" height="400"/>-->
+    <!--{%endif%}-->
+  <!--</div>-->
+
+
+    <form class="input4" style="margin-left:30px;margin-right:30px;" action="/form_page/add_general" method="POST" name="general">
+        <ul class="flex_capex" style="margin:2px;">
+        <li class="input-item">
+        <input style="width: 100px;display:flex;" type="text" name="project_name" id="project_name" placeholder="Project name" onfocus="this.placeholder='{{project_name}}'" onblur="this.placeholder='Project name'" class="form-control form-control-sm" >
+        </li>
+        <li class="input-item">
+        <input style="width: 100px;display:flex;" type="text" name="unit_name" id="unit_name" placeholder="Unit name" onfocus="this.placeholder='{{unit_name}}'" onblur="this.placeholder='Unit name'" class="form-control form-control-sm" >
+        </li>
+        <li class="input-item">
+        <input style="width: 150px;display:flex;" type="number" name="energy_price" id="energy_price" placeholder="Energy Price,{{currency}}/kWh" onfocus="this.placeholder='{{energy_price}}'" onblur="this.placeholder='Energy Price,{{currency}}/kWh'" min="0" step="0.01" class="form-control form-control-sm">
+        </li>
+        <li class="input-item">
+        <input style="width: 150px;display:flex;" type="number" name="annual_increase" id="annual_increase" placeholder="Annual Price Increase,%" onfocus="this.placeholder='{{annual_increase}}'" onblur="this.placeholder='Annual Price Increase,%'" min=0 step="0.01" class="form-control form-control-sm">
+        </li>
+        <li class="input-item">
+        <input style="width: 150px;display:flex;" type="number" name="number_years" id="number_years" placeholder="Number of years" onfocus="this.placeholder='{{number_years}}'" onblur="this.placeholder='Number of years'" min=0 step="1" class="form-control form-control-sm">
+        </li>
+        <li class="input-item">
+                   <select style="width: 100px;display:flex;" class="form-select form-select-sm" name="currency" id="currency" aria-label=".form-select-sm example">
+                        <option value="{{currency}}" selected>{{currency}}</option>
+                        {%if currency== "$"%}
+                        <option value="€">€</option>
+                        <option value="₽">₽</option>
+                        <option value="¥">¥</option>
+                        {%endif%}
+                        {%if currency=="€"%}
+                        <option value="$">$</option>
+                        <option value="₽">₽</option>
+                        <option value="¥">¥</option>
+                        {%endif%}
+                        {%if currency=="₽"%}
+                        <option value="€">€</option>
+                        <option value="$">$</option>
+                        <option value="¥">¥</option>
+                        {%endif%}
+                        {%if currency=="¥"%}
+                        <option value="€">€</option>
+                        <option value="$">$</option>
+                        <option value="₽">₽</option>
+                        {%endif%}
+                    </select>
+        </li>
+        <li class="input-item">
+        <button type="submit" style="display:flex;width: 100px;margin-left:20px;" class="btn btn-primary btn-sm" onclick="document.forms.general.submit()" />Update data</button>
+        </li>
+        <li class="input-item">
+        <select style="width: 170px;display:flex;" class="form-select form-select-sm bg-warning text-dark" name="config" id="config" >
+                                        <option value="" disabled selected>Select configuration</option>
+                                        {% for a in configurations%}
+                                        <option>{{a}}
+                                        {% endfor %}
+        </select>
+        </li>
+        </ul>
+    </form>
+
+
+<!--</section>-->
+<p></p>
+
+
+<ul class="flex_capex">
+  <li class="input-item">
+     <div class="list-content" style="display: flex;justify-content: center;align-items: center;text-align: center;width:40px;"><p style="writing-mode:vertical-rl;transform: scale(-1);">CAPEX</p>
+     </div>
+  </li>
+  <li class="tab-item">
+    <div class="list-content" style="padding:5px;">
       <table class="table table-sm">
           <form action="/form_page/add_component" method="POST" name="unit_data" autocomplete="off" id="unit_data">
               <fieldset>
@@ -70,7 +417,7 @@
                     </td>
                     <td >
                         <form action="/ProcessPrice2" method="POST" name="changeprice" autocomplete="off" id="changeprice">
-                        <input style="width: 50%;text-align: center;"  name="name{{i[3]}}" type="number" value="{{i[1]}}" onchange="submitForm(this)" id="price {{i[3]}}" size="4"> {{currency}}
+                        <input style="width: 80%;text-align: center;"  name="name{{i[3]}}" type="number" value="{{i[1]}}" onchange="submitForm(this)" id="price {{i[3]}}" size="4"> {{currency}}
                         </form>
                             <!--<input style="width: 50%;text-align: center;"  type="number" value="{{i[1]}}" placeholder="{{i[1]}}" onchange="changeValue()" id="price {{i[3]}}" size="4"> {{currency}}-->
 
@@ -78,7 +425,7 @@
                     </td>
 
                     <td>
-                        <input size=14 type="text" value="{{i[2]}}" placeholder="{{i[2]}}" onchange="" id="comment {{i[3]}}">
+                        <input style="width: 70%;text-align: center;" type="text" value="{{i[2]}}" placeholder="{{i[2]}}" onchange="" id="comment {{i[3]}}">
                     </td>
                     <td align="right">
                         <a class="btn btn-outline-warning btn-sm" href='/form_page/{{i[3]}}/del'>Delete</a>
@@ -93,35 +440,26 @@
             </tr>
           </tbody>
       </table>
-      <!--<br>...{{info}}-->
-      <!--<br> {{user_components}}-->
-      <!--<br>-->
-        <!--{% for item in data %}-->
-        <!--<span onclick='somefunction({{item | tojson}})';>{{ item }}</span>-->
-        <!--{% endfor %}-->
-      <!--<br>-->
-      <!--<script type="text/javascript">-->
-        <!--function test_func(data) {-->
-        <!--console.log(data);-->
-        <!--}-->
-        <!--test_func({{ data|safe }})-->
-      <!--</script>-->
-
-  </div>
-
-  <div class="image_capex" style="padding:5px">
+    </div>
+    </li>
+   <li class="image-item">
+    <div class="list-content" style="padding:5px;">
     {% if total_capex_direct==0 %}
     <br><br><div align="middle">No figure to display</div>
     {%else%}
     <img src="{{url_for('static', filename='capex2.png')}}" align="middle" alt="Capex pic" />
     {%endif%}
   </div>
+  </li>
+</ul>
 
-    <div class="input2" style="display: flex;justify-content: center;align-items: center;text-align: center;"><p style="writing-mode:vertical-rl;transform: scale(-1);">Maintenance</p>
-
-  </div>
-
-  <div class="tab2">
+<ul class="flex_capex">
+    <li class="input-item">
+     <div class="list-content" style="display: flex;justify-content: center;align-items: center;text-align: center;width:40px;"><p style="writing-mode:vertical-rl;transform: scale(-1);">Maintenance</p>
+     </div>
+    </li>
+    <li class="tab-item">
+     <div class="list-content">
       <form action="/form_page/add_maintenance" method="POST" name="maintenance" autocomplete="off" id="maintenance">
       <fieldset>
          <div class="form-row">
@@ -131,7 +469,7 @@
                         <th scope="col">
                         </th>
                         <th>
-                            <input size=15 name="main_type" list=maintenances placeholder="Maintenance type" onchange="autofill()" id='main_type' required/>
+                            <input style="border:1px solid grey;" size=15 name="main_type" class="form-control form-control-sm" list=maintenances placeholder="Maintenance type" onchange="autofill()" id='main_type' required/>
                             <datalist id=maintenances>
                                 <label>
                                     or select from the list:
@@ -198,18 +536,25 @@
 
   </div>
 
-  <div class="image_main" style="padding:5px">
+  </li>
+  <li class="image-item" style="padding:5px">
+    <div class="list-content">
     {% if mains[-1]==0 %}
       <br><br> <div align="middle">No figure to display</div>
     {%else%}
     <img src="{{url_for('static', filename='maintenance.png')}}" align="middle" width="680" height="340"/>
     {%endif%}
-  </div>
+    </div>
+  </li>
+</ul>
 
-  <div class="input3" style="display: flex;justify-content: center;align-items: center;text-align: center;"><p style="writing-mode:vertical-rl;transform: scale(-1);">Operating Points</p>
-  </div>
-
-  <div class="tab3">
+<ul class="flex_capex">
+    <li class="input-item">
+     <div class="list-content" style="display: flex;justify-content: center;align-items: center;text-align: center;width:40px;"><p style="writing-mode:vertical-rl;transform: scale(-1);">Operating Points</p>
+     </div>
+    </li>
+    <li class="tab-item">
+<div class="list-content">
       <table class="table table-striped table-sm">
           <thead>
             <form action="/form_page/add_point" method="POST" name="oper_points">
@@ -284,87 +629,19 @@
       </table>
       {% endif %}
   </div>
-
-  <div class="image_energy">
+  </li>
+  <li class="image-item" style="padding:5px">
+     <div class="list-content">
     {% if costs[-1]==0 %}
     <br><br> <div align="middle">No figure to display</div>
     {%else%}
-    <img src="{{url_for('static', filename='energy.png')}}" align="middle" width="800" height="400"/>
+    <img src="{{url_for('static', filename='energy.png')}}" align="middle" width="680" height="340"/>
     {%endif%}
   </div>
+  </li>
+</ul>
 
-  <div class="input4">
-    <form action="/form_page/add_general" method="POST" name="general">
-        <table style="width: 100%">
-            <tr>
-                <td>
-                    <input type="text" name="project_name" id="project_name" placeholder="Project name" onfocus="this.placeholder='{{project_name}}'" onblur="this.placeholder='Project name'" class="form-control form-control-sm" >
-                </td>
-                <td>
-                    <input type="text" name="unit_name" id="unit_name" placeholder="Unit name" onfocus="this.placeholder='{{unit_name}}'" onblur="this.placeholder='Unit name'" class="form-control form-control-sm" >
-                </td>
-                <td>
-                    <input type="number" name="energy_price" id="energy_price" placeholder="Energy Price,{{currency}}/kWh" onfocus="this.placeholder='{{energy_price}}'" onblur="this.placeholder='Energy Price,{{currency}}/kWh'" min="0" step="0.01" class="form-control form-control-sm">
-                </td>
-                <td>
-                    <input type="number" name="annual_increase" id="annual_increase" placeholder="Annual Price Increase,%" onfocus="this.placeholder='{{annual_increase}}'" onblur="this.placeholder='Annual Price Increase,%'" min=0 step="0.01" class="form-control form-control-sm">
-                </td>
-                <td>
-                    <input type="number" name="number_years" id="number_years" placeholder="Number of years" onfocus="this.placeholder='{{number_years}}'" onblur="this.placeholder='Number of years'" min=0 step="1" class="form-control form-control-sm">
-                </td>
-                <td>
-                    <select class="form-select form-select-sm" name="currency" id="currency" aria-label=".form-select-sm example">
-                        <option value="{{currency}}" selected>{{currency}}</option>
-                        {%if currency== "$"%}
-                        <option value="€">€</option>
-                        <option value="₽">₽</option>
-                        <option value="¥">¥</option>
-                        {%endif%}
-                        {%if currency=="€"%}
-                        <option value="$">$</option>
-                        <option value="₽">₽</option>
-                        <option value="¥">¥</option>
-                        {%endif%}
-                        {%if currency=="₽"%}
-                        <option value="€">€</option>
-                        <option value="$">$</option>
-                        <option value="¥">¥</option>
-                        {%endif%}
-                        {%if currency=="¥"%}
-                        <option value="€">€</option>
-                        <option value="$">$</option>
-                        <option value="₽">₽</option>
-                        {%endif%}
-                    </select>
-                </td>
-                <td style="width:15px;">
-                </td>
-                <td>
-                    <button type="submit" class="btn btn-primary btn-sm" onclick="document.forms.general.submit()" />Update data</button>
-                </td>
-
-                <td >
-                    <select class="form-select form-select-sm bg-warning text-dark" name="config" id="config" >
-                                        <option value="" disabled selected>Select configuration</option>
-                                        {% for a in configurations%}
-                                        <option>{{a}}
-                                        {% endfor %}
-                    </select>
-
-                    <!--<a class="btn btn-outline-warning btn-sm" onclick="window.open('/select_conf','Select print option','width=400,height=400');" href='/reset'>Select configuration</a>-->
-                </td>
-            </tr>
-        </table>
-    </form>
-  </div>
-
-</section>
-
-<p></p>
-
-<br>
-
-<div id="energy_block" style="margin-left:30px; border:1px solid black;width: 1600px;border-style: solid;border-radius: 15px;padding: 5px;" >
+<div id="energy_block" style="margin-left:30px;margin-right:25px; border:3px rgb(0,74,130);flex-basis: 1600px;border-style: solid;border-radius: 15px;padding: 5px;" >
     <h3>Energy evaluation for project {{project_name}}, item {{unit_name}}</h3>
     <p>Energy Price: {{energy_price}} {{currency}}/kWh</p>
     <p>Annual Price Increase:  {{annual_increase}} %</p>
@@ -373,17 +650,17 @@
           <thead>
             <tr>
               <th scope="col">#</th>
-              <th scope="col">Efficiency - Electric Motor, %</th>
-              <th scope="col">Efficiency - Others, %</th>
-              <th scope="col">Pump Power Consumption, kW</th>
-              <th scope="col">Power - Auxilliaries, kW</th>
-              <th scope="col">Total power consumption,kW</th>
-              <th scope="col">Power Consumption - Drive Train, kW</th>
-              <th scope="col">Drive Train - Power Losses with Auxillaries, kW</th>
-              <th scope="col">Drive Train - Total Losses / year per operating point, kWh</th>
-              <th scope="col">Operating Scenario, months / year</th>
-              <th scope="col">Operating Scenario, hours / year</th>
-              <th scope="col">Total Power Consumption per year, Σ kWh</th>
+              <th scope="col" style="font-size: 0.875em;">Efficiency - Electric Motor, %</th>
+              <th scope="col" style="font-size: 0.875em;">Efficiency - Others, %</th>
+              <th scope="col" style="font-size: 0.875em;">Pump Power Consumption, kW</th>
+              <th scope="col" style="font-size: 0.875em;">Power - Auxilliaries, kW</th>
+              <th scope="col" style="font-size: 0.875em;">Total power consumption,kW</th>
+              <th scope="col" style="font-size: 0.875em;">Power Consumption - Drive Train, kW</th>
+              <th scope="col" style="font-size: 0.875em;">Drive Train - Power Losses with Auxillaries, kW</th>
+              <th scope="col" style="font-size: 0.875em;">Drive Train - Total Losses / year per operating point, kWh</th>
+              <th scope="col" style="font-size: 0.875em;">Operating Scenario, months / year</th>
+              <th scope="col" style="font-size: 0.875em;">Operating Scenario, hours / year</th>
+              <th scope="col" style="font-size: 0.875em;">Total Power Consumption per year, Σ kWh</th>
 
 
             </tr>
@@ -411,10 +688,11 @@
 <div>Drive Train - Total Losses / year, {{total_loss}} Σ kWh</div>
 <div>Drive Train - Enegry losses + Ext. aux. power cost / year, {{dr4}} {{currency}}</div>
     </section>
+    <br>
 <b>Energy Cost: {{energie}} {{currency}}</b><br>
 </div>
 
-<button id="toggle3" class="btn btn-primary btn-sm" style="margin-left:30px; margin-bottom:30px;">Hide Energy block</button>
+<button id="toggle3" class="btn btn-primary btn-sm" style="margin-left:40px; margin-bottom:30px;margin-top:2px;">Hide Energy block</button>
 <script>
     const targetDiv4 = document.getElementById("energy_block");
 const btn3 = document.getElementById("toggle3");
@@ -430,25 +708,24 @@ btn3.onclick = function () {
   }
 };
 </script>
+
 <br>
-<div id="tco" style="margin-left:30px; border:1px solid black;height:300px;width: 1600px;border-style: solid;border-radius: 15px;padding: 5px;" >
+
+<div id="tco" style="margin-left:30px;margin-right:25px; border:3px rgb(0,74,130);min-height:300px;flex-basis: 1200px;border-style: solid;border-radius: 15px;padding: 5px;" >
     <h3>TCO for project {{project_name}}, item {{unit_name}}</h3>
     <section class="container_tco">
-        <p>capex: {{capexy}} {{currency}}</p>
-        <p>energy: {{energie}} {{currency}}</p>
-        <p>maintenance: {{main}} {{currency}}</p>
-        <p>labor cost: {{currency}}</p>
+        <p>CAPEX: {{capexy}} {{currency}}______Energy: {{energie}} {{currency}}_____Maintenance: {{main}} {{currency}}_____Labor cost: {{currency}}</p>
         <p> Number of year: {{number_years}}</p>
     </section>
     {% if capexy>0 and main>0 and energie>0 %}
-    <img src="{{url_for('static', filename='tco.png')}}" align="middle" width="1000" height="500"/>
+    <img src="{{url_for('static', filename='tco.png')}}" align="middle" width="800" height="400"/>
     {%else%}
     <div style="margin-left:300px; margin-top:200px;">No figure to display
     </div>
     {%endif%}
 </div>
 
-<button id="toggle4" class="btn btn-primary btn-sm" style="margin-left:30px; margin-bottom:30px;">Hide TCO block</button>
+<button id="toggle4" class="btn btn-primary btn-sm" style="margin-left:40px; margin-bottom:30px;margin-top:2px;">Hide TCO block</button>
 <script>
   const targetDiv5 = document.getElementById("tco");
   const btn4 = document.getElementById("toggle4");
@@ -473,4 +750,9 @@ btn3.onclick = function () {
 <div style="margin-left:30px; margin-bottom:30px;"><a class="btn btn-warning btn-sm" href='/reset'>Reset all inputs</a>
 </div>
 
+
+
+
     {%endblock%}
+
+

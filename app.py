@@ -351,11 +351,11 @@ def form_page_add_point():
         power_pump = int(request.form["power_pump"])
         power_aux = int(request.form["power_aux"])
         scenario = int(request.form["scenario"])
-        sum = 0
-        for i in range(len(session["user_points"])):
-            sum += int(session["user_points"][i][4])
-        if sum + int(scenario) > 12:
-            return "Sum of operating scenarios should not be more than 12 months/year "
+        # sum = 0
+        # for i in range(len(session["user_points"])):
+        #     sum += int(session["user_points"][i][4])
+        # if sum + int(scenario) > 12:
+        #     return "Sum of operating scenarios should not be more than 12 months/year "
         session["user_points"].append([eff_driver, eff_other, power_pump,power_aux,scenario, n3,0,0,0])
         n3 += 1
         #point=Point(eff_driver=eff_driver,eff_other=eff_other,power_pump=power_pump,power_aux=power_aux,scenario=scenario)
